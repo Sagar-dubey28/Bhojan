@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
@@ -24,7 +24,7 @@ const themes = [
 
 const Header = () => {
   const [theme, setTheme] = useState("Light");
-
+  
   const handleThemeChange = (selectedTheme) => {
     setTheme(selectedTheme);
     // Apply theme class to <html> or <body>
@@ -32,9 +32,9 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center px-10 py-5 bg-white shadow-sm">
+    <header className="flex justify-between items-center px-10 py-5 bg-warning shadow-sm">
       {/* Left side Logo */}
-      <div className="text-orange-500 text-2xl font-bold">
+      <div className="text-warning-content text-2xl font-bold">
         <NavLink to="/">🍽️ Logo</NavLink>
       </div>
 
@@ -66,6 +66,14 @@ const Header = () => {
 
       {/* Right side - Login + Theme */}
       <div className="flex items-center gap-4">
+
+         <NavLink
+          to="/cart"
+          className="p-2 rounded-lg hover:bg-orange-100 transition-colors"
+        >
+          <ShoppingCart className="w-6 h-6 text-orange-500" />
+        </NavLink>
+
         <NavLink
           to="/login"
           className={({ isActive }) =>
@@ -84,7 +92,7 @@ const Header = () => {
           <select
             value={theme}
             onChange={(e) => handleThemeChange(e.target.value)}
-            className="px-2 py-2 border rounded-lg bg-white text-sm font-bold focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className=" py-2 rounded-lg bg-white text-lg  font-bold pl-4 focus:outline-none  text-orange-500 "
           >
             {themes.map((t) => (
               <option key={t} value={t}>
@@ -92,6 +100,8 @@ const Header = () => {
               </option>
             ))}
           </select>
+          
+
         </div>
       </div>
     </header>
