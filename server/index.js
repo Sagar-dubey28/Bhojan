@@ -1,15 +1,24 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
+import authRoutes from "./src/routes/authRoutes.js"
 
 
 dotenv.config();
 
 const app = express();
 
+// build in middleware
+app.use(express.json());
+
+
 app.get("/",(req,res)=>{
     res.json({message: "server Connected"})
 })
+
+//Routing
+app.use("/api/auth", authRoutes);
+
 
 const port = process.env.PORT || 5000;
 

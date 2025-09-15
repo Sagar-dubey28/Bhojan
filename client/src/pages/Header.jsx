@@ -1,108 +1,103 @@
 import { Search, ShoppingCart } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const themes = [
-  "Light",
-  "Dark",
-  "Black",
-  "Claude",
-  "Corporate",
-  "Ghibli",
-  "Gourmet",
-  "Luxury",
+  "light",
+  "dark",
+  "claude",
+  "corporate",
+  "ghibli",
+  "gourmet",
   "Mintlify",
-  "Pastel",
   "Perplexity",
-  "Shadcn",
-  "Slack",
-  "Soft",
-  "Spotify",
-  "Valorant",
-  "Vscode"
+  "luxury",
+  "pastel",
+  "slack",
+  "soft",
+  "spotify",
+  "valorant",
+  "vscode",
 ];
 
 const Header = () => {
-  const [theme, setTheme] = useState("Light");
-  
+  const [theme, setTheme] = useState(
+    localStorage.getItem("BhojanTheme") || "light"
+  );
+
   const handleThemeChange = (selectedTheme) => {
     setTheme(selectedTheme);
-    // Apply theme class to <html> or <body>
-    document.documentElement.setAttribute("data-theme", selectedTheme.toLowerCase());
+    localStorage.setItem("BhojanTheme", selectedTheme);
+    document.documentElement.setAttribute("data-theme", selectedTheme);
   };
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
   return (
-    <header className="flex justify-between items-center px-10 py-5 bg-warning shadow-sm">
-      {/* Left side Logo */}
-      <div className="text-warning-content text-2xl font-bold">
-        <NavLink to="/">🍽️ Logo</NavLink>
+    <header className="flex justify-between items-center px-6 py-4 bg-base-200 shadow-md">
+      {/* Left - Logo */}
+      <div className="text-primary text-2xl font-bold">
+        <NavLink to="/">🍽️ Bhojan</NavLink>
       </div>
 
-      {/* Center - Home + Search */}
-      <div className="flex items-center gap-8 flex-1 justify-center">
+      {/* Center - Nav + Search (hidden on small screens) */}
+      <div className="flex items-center gap-6 flex-1 justify-center max-md:hidden">
         <NavLink
           to="/"
           className={({ isActive }) =>
-            `font-medium ${
-              isActive
-                ? "text-orange-500"
-                : "text-gray-700 hover:text-orange-500"
+            `font-medium transition-colors ${
+              isActive ? "text-primary" : "text-base-content hover:text-primary"
             }`
           }
         >
           Home
         </NavLink>
 
-        {/* Search bar */}
-        <div className="relative w-80">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <div className="relative w-72">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50 w-4 h-4" />
           <input
             type="text"
             placeholder="Search for restaurants or dishes"
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-full w-full text-sm focus:outline-none focus:border-orange-500"
+            aria-label="Search restaurants or dishes"
+            className="input input-bordered pl-10 w-full text-sm focus:ring focus:ring-primary focus:outline-none"
           />
         </div>
       </div>
 
-      {/* Right side - Login + Theme */}
-      <div className="flex items-center gap-4">
-
-         <NavLink
+      {/* Right - Cart, Login + Theme */}
+      <div className="flex items-center gap-3">
+        <NavLink
           to="/cart"
-          className="p-2 rounded-lg hover:bg-orange-100 transition-colors"
+          className="p-2 rounded-lg text-base-content"
+          aria-label="View Cart"
         >
-          <ShoppingCart className="w-6 h-6 text-orange-500" />
+          <ShoppingCart className="w-6 h-6 text-base-content" />
         </NavLink>
 
         <NavLink
           to="/login"
           className={({ isActive }) =>
-            `px-4 py-2 rounded-lg font-medium transition-colors ${
-              isActive
-                ? "bg-orange-600 text-white"
-                : "bg-orange-500 text-white hover:bg-orange-600"
-            }`
+            `btn btn-sm ${isActive ? "btn-primary" : "btn-accent"}`
           }
         >
           Login
         </NavLink>
 
-        {/* Theme dropdown */}
-        <div className="relative">
-          <select
-            value={theme}
-            onChange={(e) => handleThemeChange(e.target.value)}
-            className=" py-2 rounded-lg bg-white text-lg  font-bold pl-4 focus:outline-none  text-orange-500 "
-          >
-            {themes.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-          
-
-        </div>
+        {/* Theme Selector */}
+        <select
+          value={theme}
+          onChange={(e) => handleThemeChange(e.target.value)}
+          className="select select-sm select-primary"
+          aria-label="Select Theme"
+        >
+          {themes.map((t) => (
+            <option key={t} value={t}>
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </option>
+          ))}
+        </select>
       </div>
     </header>
   );
