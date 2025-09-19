@@ -30,7 +30,7 @@ const HomePage = () => {
       </div>
 
       {/* Right - Image Carousel */}
-      <div className="flex-1 relative h-72 md:h-[28rem] w-full overflow-hidden rounded-3xl shadow-xl">
+      <div className="flex-1 relative h-64 md:h-[24rem] w-full overflow-hidden rounded-3xl shadow-xl">
         {foodImages.map((image, index) => (
           <img
             key={index}

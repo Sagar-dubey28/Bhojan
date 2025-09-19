@@ -1,45 +1,30 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import api from "../config/api";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+ 
+  const[loginData,setloginData]= useState({
+    email:"",
+    password:"",
+  })
 
-  const handleLogin = async (e) => {
-    e.preventDefault(); // prevent page refresh
-    setLoading(true);
-    setError("");
-    console.log(data);
+  const handlechange = (e)=>{
+    const{name,value}= e.target;
+    setloginData((prev)=>({...prev,[name]:value}));
+  }
+
+   const handleLogin = async (e)=>{
+     e.preventDefault();
     
-    try {
-      const response = await fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      // Save token if backend returns one
-      sessionStorage.setItem("authToken", data.token);
-
-      // Redirect to homepage (or dashboard)
-      navigate("/");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+     try {
+       const res = await api.post("/auth/login", loginData);
+       alert(res.data.message);
+     } catch (error) {
+       alert(error.message);
+     }
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-base-200 px-4">
@@ -52,10 +37,7 @@ const LoginPage = () => {
           Login to your account
         </p>
 
-        {/* Error message */}
-        {error && (
-          <p className="text-red-500 text-sm text-center mb-4">{error}</p>
-        )}
+       
 
         {/* Login Form */}
         <form className="space-y-4" onSubmit={handleLogin}>
@@ -67,8 +49,9 @@ const LoginPage = () => {
               type="email"
               placeholder="Enter your email"
               className="input input-bordered w-full"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={loginData.email}
+              onChange={handlechange}
               required
             />
           </div>
@@ -81,8 +64,9 @@ const LoginPage = () => {
               type="password"
               placeholder="Enter your password"
               className="input input-bordered w-full"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={loginData.password}
+              onChange={handlechange}
               required
             />
           </div>
@@ -91,9 +75,9 @@ const LoginPage = () => {
           <button
             type="submit"
             className="btn btn-primary w-full"
-            disabled={loading}
+          
           >
-            {loading ? "Logging in..." : "Log In"}
+            Login
           </button>
         </form>
 

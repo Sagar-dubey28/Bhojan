@@ -4,6 +4,7 @@ import Header from './pages/Header';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import Signup from './pages/signup';
+import ProfilePage from './pages/ProfilePage';
 
 
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profilePage" element={<ProfilePage/>}/>
       </Routes>
     </Router>
     </>

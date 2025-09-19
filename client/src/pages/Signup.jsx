@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "../config/api";
 
 const SignupPage = () => {
   const [signupData, setSignupData] = useState({
@@ -9,46 +10,25 @@ const SignupPage = () => {
     password: "",
     confirmPassword: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSignupData({ ...prev, [name]: value });
+    setSignupData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  const handleSignup = (e)=>{
+     e.preventDefault();
+     if(signupData.password !== signupData.confirmPassword){
+      alert("Password does not match");
+     }
 
-    // Frontend validation
-    if (signupData.password !== signupData.confirmPassword) {
-      setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-
-    // Print form data to console
-    console.log("Signup Data:", signupData);
-
-    try {
-      const response = await axios.post("/auth/signup", signupData
-        
-      );
-
-      console.log("Signup successful:", response.data);
-
-      // Redirect to login
-      navigate("/login");
-    } catch (err) {
-      console.error("Signup error:", err.response?.data?.message || err.message);
-      setError(err.response?.data?.message || err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+     try {
+       const res = api.post("/auth/register", signupData);
+       alert(res.data.message);
+     } catch (error) {
+       alert(error.message);
+     }
+  }
 
   return (
     <div className="flex items-center justify-center h-screen bg-base-200 px-4">
@@ -59,9 +39,6 @@ const SignupPage = () => {
         <p className="text-center text-sm text-base-content/70 mb-6">
           Sign up to order food
         </p>
-
-        {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
-
         <form className="space-y-4" onSubmit={handleSignup}>
           <input
             type="text"
@@ -100,14 +77,20 @@ const SignupPage = () => {
             required
           />
 
-          <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-            {loading ? "Signing Up..." : "Sign Up"}
+          <button
+            type="submit"
+            className="btn btn-primary w-full"
+          >SignUp
+            
           </button>
         </form>
 
         <p className="text-center text-sm text-base-content/70 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="text-primary font-medium hover:underline">
+          <Link
+            to="/login"
+            className="text-primary font-medium hover:underline"
+          >
             Sign in
           </Link>
         </p>
