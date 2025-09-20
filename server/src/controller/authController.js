@@ -16,9 +16,17 @@ export const registerUser = async (req, res, next) => {
       const errorStatus = 500;
       return next(error);
     }
-    //const hashpassword = bcrypt.hash(password,10);//
+    const hashpassword = await bcrypt.hash(password, 10);
+    const profilePic = `https://placehold.co/600x400/EEE/31343C?font=poppins&text=${fullName.charAt(
+      0
+    )}`;
 
-    const newUser = await User.create({ fullName, email, password });
+    const newUser = await User.create({
+      fullName,
+      email,
+      password: hashpassword,
+      profilePic,
+    });
 
     res.status(200).json({ message: "User Created Sucessfully" });
   } catch (error) {
@@ -38,15 +46,28 @@ export const loginUser = async (req, res, next) => {
 
     const findingUser = await User.findOne({ email });
 
-    if (findingUser) {
-      if (password === findingUser.password) {
-        res.status(200).json({ message: "You Login succesfully" });
-      } else {
-        res.status(500).json({ message: "password not match" });
-      }
-    } else {
-      res.status(500).json({ message: "You don't have account" });
+    if (!findingUser) {
+      const error = new Error("User not Found ,Please Register");
+      error.statusCode = 404;
+      return next(error);
     }
+
+    const passwordMatch = await bcrypt.compare(password,findingUser.password);
+    if (!passwordMatch) {
+      const error = new Error("Invalid userName or password");
+      error.statusCode = 401;
+      return next(error);
+    }
+    res
+      .status(200)
+      .json({
+        message: `welcome back, ${findingUser.fullName}`,
+        data: {
+          fullName: findingUser.fullName,
+          email: findingUser.email,
+          profilePic: findingUser.profilePic,
+        },
+      });
   } catch (error) {
     next(error);
   }

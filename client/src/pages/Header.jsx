@@ -1,6 +1,7 @@
 import { Search, ShoppingCart } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../Context/AuthProvider";
 
 const themes = [
   "light",
@@ -21,6 +22,12 @@ const themes = [
 ];
 
 const Header = () => {
+  const { user, isLogin } = useAuth();
+  
+  
+
+  const navigate = useNavigate();
+
   const [theme, setTheme] = useState(
     localStorage.getItem("BhojanTheme") || "light"
   );
@@ -76,14 +83,35 @@ const Header = () => {
           <ShoppingCart className="w-6 h-6 text-base-content" />
         </NavLink>
 
-        <NavLink
-          to="/login"
-          className={({ isActive }) =>
-            `btn btn-sm ${isActive ? "btn-primary" : "btn-accent"}`
-          }
-        >
-          Login
-        </NavLink>
+      <div>
+           {isLogin && user ? (
+          <div
+            className="flex gap-3 items-center cursor-pointer"
+            onClick={() => navigate("/profilePage")}
+          >
+            <div className="h-12 w-12 rounded-full border overflow-hidden">
+              <img
+                src={user.profilePic}
+                alt="userPicture"
+                className="h-full w-full rounded-full object-cover"
+              />
+            </div>
+
+            <span className="text-primary text-xl">
+              {user.fullName.split(" ")[0]}
+            </span>
+          </div>
+        ) : (
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              `btn btn-sm ${isActive ? "btn-primary" : "btn-accent"}`
+            }
+          >
+            Login
+          </NavLink>
+        )}
+      </div>
 
         {/* Theme Selector */}
         <select

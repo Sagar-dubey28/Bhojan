@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import api from "../config/api";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
   const [signupData, setSignupData] = useState({
     fullName: "",
     email: "",
@@ -25,6 +25,7 @@ const SignupPage = () => {
      try {
        const res = api.post("/auth/register", signupData);
        alert(res.data.message);
+       navigate("/login");
      } catch (error) {
        alert(error.message);
      }

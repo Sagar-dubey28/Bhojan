@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../config/api";
+import { useAuth } from "../Context/AuthProvider";
 
 const LoginPage = () => {
- 
+  
+  const {setUser,setIsLogin}= useAuth();
+
+  const navigate = useNavigate();
+
   const[loginData,setloginData]= useState({
     email:"",
     password:"",
@@ -16,11 +21,15 @@ const LoginPage = () => {
 
    const handleLogin = async (e)=>{
      e.preventDefault();
-    
 
      try {
        const res = await api.post("/auth/login", loginData);
        alert(res.data.message);
+       setUser(res.data.data);
+       setIsLogin(true);
+       sessionStorage.setItem("BhojanUser", JSON.stringify(res.data.data))
+       navigate("/profilePage");
+       
      } catch (error) {
        alert(error.message);
      }
