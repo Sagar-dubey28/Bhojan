@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import api from "../config/api";
 import { useAuth } from "../Context/AuthProvider";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   
@@ -24,14 +25,14 @@ const LoginPage = () => {
 
      try {
        const res = await api.post("/auth/login", loginData);
-       alert(res.data.message);
+       toast.success(res.data.message);
        setUser(res.data.data);
        setIsLogin(true);
        sessionStorage.setItem("BhojanUser", JSON.stringify(res.data.data))
        navigate("/profilePage");
        
      } catch (error) {
-       alert(error.message);
+       toast.error(error.message);
      }
   }
 

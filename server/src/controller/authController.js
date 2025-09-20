@@ -12,8 +12,8 @@ export const registerUser = async (req, res, next) => {
     }
     const exitingUser = await User.findOne({ email });
     if (exitingUser) {
-      const error = new error("You are Already exist");
-      const errorStatus = 500;
+      const error = new Error("You are Already exist");
+      error.statusCode = 500;
       return next(error);
     }
     const hashpassword = await bcrypt.hash(password, 10);

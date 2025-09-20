@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../config/api";
+import toast from "react-hot-toast";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -16,18 +17,18 @@ const SignupPage = () => {
     setSignupData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSignup = (e)=>{
+  const handleSignup = async (e)=>{
      e.preventDefault();
      if(signupData.password !== signupData.confirmPassword){
-      alert("Password does not match");
+      toast.error("Password does not match");
      }
 
      try {
-       const res = api.post("/auth/register", signupData);
-       alert(res.data.message);
+       const res = await api.post("/auth/register", signupData);
+       toast.success(res.data.message);
        navigate("/login");
      } catch (error) {
-       alert(error.message);
+       toast.error(error.message);
      }
   }
 
