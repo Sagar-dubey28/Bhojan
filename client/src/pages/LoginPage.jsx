@@ -22,9 +22,10 @@ const LoginPage = () => {
 
    const handleLogin = async (e)=>{
      e.preventDefault();
-
+  
      try {
        const res = await api.post("/auth/login", loginData);
+       console.log("chl ra hub");
        toast.success(res.data.message);
        setUser(res.data.data);
        setIsLogin(true);
@@ -32,6 +33,8 @@ const LoginPage = () => {
        navigate("/profilePage");
        
      } catch (error) {
+       console.log(error);
+      
        toast.error(error.message);
      }
   }
@@ -93,7 +96,7 @@ const LoginPage = () => {
 
         {/* Sign up link */}
         <p className="text-center text-sm text-base-content/70 mt-6">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <NavLink
             to="/signup"
             className="text-primary font-medium hover:underline"

@@ -3,13 +3,16 @@ import { User, LogOut } from "lucide-react";
 import { useAsyncValue, useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthProvider";
 import toast from "react-hot-toast";
+import api from "../config/api";
 
 const Sidebar = ({ active, setActive }) => {
-  const { setIsLogin } = useAuth();
+  const { setIsLogin,user,setUser } = useAuth();
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
     try {
+      const res = await api.post("/auth/logout")
+      setUser("");
       sessionStorage.removeItem("BhojanUser");
       setIsLogin(false);
       toast.success("Successfully Logout");
@@ -27,13 +30,17 @@ const Sidebar = ({ active, setActive }) => {
           <div className="card-body items-center text-center">
             <div className="avatar">
               <div className="w-24 rounded-full ring ring-base-200 ring-offset-2 bg-gradient-to-r from-primary to-secondary flex items-center justify-center shadow-md">
-                <User className="w-16 h-16 text-white mt-2 ml-4" />
+                <img
+                  src={user.profilePic}
+                  alt="userPicture"
+                  className="h-full w-full rounded-full object-cover"
+                />
               </div>
             </div>
             <h3 className="card-title text-lg font-bold text-gray-900">
-              user.name
+              {user.fullName}
             </h3>
-            <p className="text-sm text-gray-500">user.email</p>
+            <p className="text-sm text-gray-500">{user.email}</p>
           </div>
         </div>
 
