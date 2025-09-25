@@ -9,7 +9,7 @@ export const genForgetPassToken = (email, res) => {
         maxAge:1000*60*10,
         httpOnly:true,
         sameSite:"lax",
-        secure:true,
+        secure:false, //production  main true kr lena.
     })
     return true;
   } catch (error) {

@@ -93,7 +93,7 @@ const SignupPage = () => {
             to="/login"
             className="text-primary font-medium hover:underline"
           >
-            Sign in
+            Log in
           </Link>
         </p>
       </div>

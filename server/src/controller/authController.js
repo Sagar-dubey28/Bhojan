@@ -57,6 +57,8 @@ export const loginUser = async (req, res, next) => {
     }
 
     const passwordMatch = await bcrypt.compare(password, findingUser.password);
+    console.log(passwordMatch);
+
     if (!passwordMatch) {
       const error = new Error("Invalid userName or password");
       error.statusCode = 401;
@@ -161,14 +163,14 @@ export const sendOtp = async (req, res, next) => {
       </html>`;
 
     const emailStatus = await sendEmail(email, "OTP for verification", message);
-    console.log("hasgycfuyasyufuyasuycfguysdfuysuyg");
-    
+
     const hashOtp = await bcrypt.hash(otp.toString(), 10);
 
     await OTP.create({
       email,
       otp: hashOtp,
     });
+
     if (emailStatus) {
       res.status(200).json({ mesage: "OTp sent Successfully on Email" });
     } else {
@@ -181,18 +183,22 @@ export const sendOtp = async (req, res, next) => {
 export const verifyOtp = async (req, res, next) => {
   try {
     const { email, otp } = req.body;
-    const otpIsAvailable = OTP.findOne({ email });
+    const otpIsAvailable = await OTP.findOne({ email });
+
     if (!otpIsAvailable) {
       const error = new Error("OTP expired. Try Again");
       error.statusCode = 401;
       return next(error);
     }
+
     const otpValid = await bcrypt.compare(otp.toString(), otpIsAvailable.otp);
+
     if (!otpValid) {
       const error = new Error("Invalid OTP. Try Again");
       error.statusCode = 401;
       return next(error);
     }
+
     if (!genForgetPassToken(email, res)) {
       const error = new Error("Unable to Complete the Process");
       error.statusCode = 403;
@@ -207,14 +213,16 @@ export const verifyOtp = async (req, res, next) => {
 export const forgetPassword = async (req, res, next) => {
   try {
     const { newPassword } = req.body;
-  const currentUser = req.user;
+    const currentUser = req.user;
 
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
-  currentUser.password= hashedPassword;
-  await currentUser.save();
-  res.clearCookie("BhojanFp");
-  res.status(200).json({message:"Password Change Successful"})
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    currentUser.password = hashedPassword;
+    await currentUser.save();
+   
+    
+    res.clearCookie("BhojanFp");
+    res.status(200).json({ message: "Password Change Successful" });
   } catch (error) {
-     next(error);
+    next(error);
   }
 };

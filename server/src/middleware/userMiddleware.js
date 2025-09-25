@@ -36,8 +36,9 @@ export const ProtectFP = async (req, res, next) => {
     const token = req.cookies.BhojanFp;
 
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
-
     console.log(decode);
+    
+
     if (!decode) {
       const error = new Error("Not Authorized, No Token Found");
       error.statusCode = 401;
