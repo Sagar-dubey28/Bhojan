@@ -19,6 +19,27 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+      gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+      default: "other",
+    },
+    phone: {
+      type: String,
+      required: true,
+      default: "9876543210",
+    },
+    dob: {
+      type: String,
+      required: true,
+      default: "01/01/2000",
+    },
+    foodType: {
+      type: String,
+      required: true,
+      enum: ["veg", "non-veg", "eggetarian", "jain", "vegan", "any"],
+      default: "veg",
+    },
   },
   { timestamps: true }
 );

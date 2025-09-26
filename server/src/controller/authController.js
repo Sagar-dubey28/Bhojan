@@ -55,8 +55,11 @@ export const loginUser = async (req, res, next) => {
       error.statusCode = 404;
       return next(error);
     }
-
+    
+    console.log("password match se phle");
+    
     const passwordMatch = await bcrypt.compare(password, findingUser.password);
+
     console.log(passwordMatch);
 
     if (!passwordMatch) {
@@ -79,6 +82,10 @@ export const loginUser = async (req, res, next) => {
         fullName: findingUser.fullName,
         email: findingUser.email,
         profilePic: findingUser.profilePic,
+        gender:findingUser.gender,
+        dob:findingUser.dob,
+        phone:findingUser.phone,
+        foodType: findingUser.foodType,
       },
     });
   } catch (error) {
@@ -218,7 +225,8 @@ export const forgetPassword = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     currentUser.password = hashedPassword;
     await currentUser.save();
-   
+    console.log("save ho gya hun.");
+    
     
     res.clearCookie("BhojanFp");
     res.status(200).json({ message: "Password Change Successful" });
