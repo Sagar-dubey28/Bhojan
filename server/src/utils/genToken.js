@@ -12,7 +12,7 @@ const genToken = (userId, res) => {
       sameSite: "lax",
       secure: false,  // production ke liye secure true kr lena.
     });
-    console.log(token);
+    
 
     return true;
   } catch (error) {

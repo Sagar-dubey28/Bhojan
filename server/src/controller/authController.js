@@ -21,9 +21,8 @@ export const registerUser = async (req, res, next) => {
       return next(error);
     }
     const hashpassword = await bcrypt.hash(password, 10);
-    const profilePic = `https://placehold.co/600x400/EEE/31343C?font=poppins&text=${fullName.charAt(
-      0
-    )}`;
+    const fullNameUpperCase = fullName.charAt(0).toUpperCase();
+    const profilePic = `https://placehold.co/600x400/EEE/31343C?font=poppins&text=${fullNameUpperCase}`;
 
     const newUser = await User.create({
       fullName,
@@ -55,9 +54,9 @@ export const loginUser = async (req, res, next) => {
       error.statusCode = 404;
       return next(error);
     }
-    
+
     console.log("password match se phle");
-    
+
     const passwordMatch = await bcrypt.compare(password, findingUser.password);
 
     console.log(passwordMatch);
@@ -67,14 +66,14 @@ export const loginUser = async (req, res, next) => {
       error.statusCode = 401;
       return next(error);
     }
-    console.log("token phle");
+   
 
     if (!genToken(findingUser._id, res)) {
       const error = new Error("Unable to login");
       error.statusCode = 403;
       return next(error);
     }
-    console.log("token bad");
+    
 
     res.status(200).json({
       message: `welcome back, ${findingUser.fullName}`,
@@ -82,9 +81,9 @@ export const loginUser = async (req, res, next) => {
         fullName: findingUser.fullName,
         email: findingUser.email,
         profilePic: findingUser.profilePic,
-        gender:findingUser.gender,
-        dob:findingUser.dob,
-        phone:findingUser.phone,
+        gender: findingUser.gender,
+        dob: findingUser.dob,
+        phone: findingUser.phone,
         foodType: findingUser.foodType,
       },
     });
@@ -220,14 +219,18 @@ export const verifyOtp = async (req, res, next) => {
 export const forgetPassword = async (req, res, next) => {
   try {
     const { newPassword } = req.body;
+    console.log("NewPasword", newPassword);
+
     const currentUser = req.user;
+    console.log("CurrentUser", currentUser);
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     currentUser.password = hashedPassword;
     await currentUser.save();
+    console.log("NewCurrentUser", currentUser);
+
     console.log("save ho gya hun.");
-    
-    
+
     res.clearCookie("BhojanFp");
     res.status(200).json({ message: "Password Change Successful" });
   } catch (error) {
