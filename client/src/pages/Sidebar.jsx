@@ -25,7 +25,7 @@ const Sidebar = ({ active, setActive }) => {
   return (
     <>
       {/* sidebar */}
-      <aside className="w-72 bg-base-100 shadow-xl border-r flex flex-col">
+      <aside className="w-72 bg-base-100 shadow-xl  flex flex-col">
         <div className="card shadow-sm border-b bg-base-100">
           <div className="card-body items-center text-center">
             <div className="avatar">

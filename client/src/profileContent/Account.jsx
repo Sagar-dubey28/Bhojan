@@ -9,103 +9,112 @@ const Account = () => {
   
   const [isResetPassModalOpen, setIsResetPassModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  
   return (
     <>
-      <div className="card bg-base-100  border border-gray-200 ">
-        <div className="card-body">
-          {/* Profile Picture Section */}
-          <div className="flex flex-col items-center">
-            <div className="avatar">
-              <div className="w-44 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img src={user.profilePic} alt="Profile" />
+      <div className="min-h-screen flex">
+        <div className="card bg-base-100 border border-gray-200 w-full h-fit">
+          <div className="card-body p-6">
+            {/* Profile Picture Section - Reduced size */}
+            <div className="flex flex-col items-center mb-4">
+              <div className="avatar">
+                <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                  <img src={user.profilePic} alt="Profile" />
+                </div>
               </div>
             </div>
-            <label className="mt-3 cursor-pointer">
-              <span className="btn btn-outline btn-primary btn-sm">
-                Upload New Photo
-              </span>
-              <input type="file" accept="image/*" className="hidden" />
-            </label>
-          </div>
 
-          {/* Form Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-            {/* Name */}
-            <div>
-              <label className="label">
-                <span className="label-text">Full Name</span>
-              </label>
-              <span className="block p-2 rounded-md border border-primary bg-base-200">
-                {user.fullName}
-              </span>
+            {/* Form Fields - Compact layout */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Name */}
+              <div>
+                <label className="label py-1">
+                  <span className="label-text text-sm">Full Name</span>
+                </label>
+                <span className="block p-2 text-sm rounded-md border border-primary bg-base-200">
+                  {user.fullName}
+                </span>
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="label py-1">
+                  <span className="label-text text-sm">Email</span>
+                </label>
+                <span className="block p-2 text-sm rounded-md border border-primary bg-base-200">
+                  {user.email}
+                </span>
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="label py-1">
+                  <span className="label-text text-sm">Phone</span>
+                </label>
+                <span className="block p-2 text-sm rounded-md border border-primary bg-base-200">
+                  {user.phone} 
+                </span>
+              </div>
+
+              {/* Password */}
+              <div>
+                <label className="label py-1">
+                  <span className="label-text text-sm">Password</span>
+                </label>
+                <span className="block p-2 text-sm rounded-md border border-primary bg-base-200">
+                  ********
+                </span>
+              </div>
+
+              {/* DOB */}
+              <div>
+                <label className="label py-1">
+                  <span className="label-text text-sm">Date of Birth</span>
+                </label>
+                <span className="block p-2 text-sm rounded-md border border-primary bg-base-200">
+                  {user.dob} 
+                </span>
+              </div>
+
+              {/* Gender */}
+              <div>
+                <label className="label py-1">
+                  <span className="label-text text-sm">Gender</span>
+                </label>
+                <span className="block p-2 text-sm rounded-md border border-primary bg-base-200">
+                  {user.gender}
+                </span>
+              </div>
+
+              {/* Food Preference - Full width */}
+              <div className="md:col-span-3">
+                <label className="label py-1">
+                  <span className="label-text text-sm">Food Preference</span>
+                </label>
+                <span className="block p-2 text-sm rounded-md border border-primary bg-base-200">
+                  {user.foodType}
+                </span>
+              </div>
             </div>
 
-            {/* Email */}
-            <div>
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
-              <span className="block p-2 rounded-md border border-primary bg-base-200">
-                {user.email}
-              </span>
+            {/* Action Buttons - Compact spacing */}
+            <div className="mt-4 flex flex-wrap gap-3 justify-end">
+              <button 
+                className="btn btn-secondary btn-sm" 
+                onClick={() => setIsResetPassModalOpen(true)}
+              >
+                Reset Password
+              </button>
+              <button 
+                className="btn btn-primary btn-sm" 
+                onClick={() => setIsEditProfileModalOpen(true)}
+              >
+                Edit Profile
+              </button>
+              <button className="btn btn-error btn-sm">
+                Deactivate Account
+              </button>
             </div>
-
-            {/* Phone */}
-            <div>
-              <label className="label">
-                <span className="label-text">Phone</span>
-              </label>
-              <span className="block p-2 rounded-md border border-primary bg-base-200">
-                {user.phone} 
-              </span>
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="label">
-                <span className="label-text">Password</span>
-              </label>
-              <span className="block p-2 rounded-md border border-primary bg-base-200">
-                ********
-              </span>
-            </div>
-
-            {/* DOB */}
-            <div>
-              <label className="label">
-                <span className="label-text">Date of Birth</span>
-              </label>
-              <span className="block p-2 rounded-md border border-primary bg-base-200">
-                {user.dob} 
-              </span>
-            </div>
-
-            {/* Gender */}
-            <div>
-              <label className="label">
-                <span className="label-text">Gender</span>
-              </label>
-              <span className="block p-2 rounded-md border border-primary bg-base-200">
-                {user.gender}
-              </span>
-            </div>
-
-            {/* Food Preference */}
-            <div className="md:col-span-2">
-              <label className="label">
-                <span className="label-text">Food Preference</span>
-              </label>
-              <span className="block p-2 rounded-md border border-primary bg-base-200">
-                {user.foodType}
-              </span>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="mt-6 flex flex-wrap gap-3 justify-end">
-            <button className="btn btn-secondary" onClick={() => setIsResetPassModalOpen(true)}>Reset Password</button>
-            <button className="btn btn-primary" onClick={() => setIsEditProfileModalOpen(true)}>Edit Profile</button>
-            <button className="btn btn-error">Deactivate Account</button>
           </div>
         </div>
       </div>
