@@ -1,6 +1,6 @@
 import React from "react";
-import { User, LogOut } from "lucide-react";
-import { useAsyncValue, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
+import {  useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthProvider";
 import toast from "react-hot-toast";
 import api from "../config/api";

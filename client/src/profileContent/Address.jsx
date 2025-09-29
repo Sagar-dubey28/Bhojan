@@ -13,7 +13,6 @@ const Address = () => {
               Add Address
             </button>
           </div>
-         
         </div>
       </div>
     </>
