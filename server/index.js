@@ -2,6 +2,7 @@ import express from "express";
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
+import adminRoutes from "./src/routes/adminRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 //Routing
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/admin",adminRoutes);
 
 //our made middleware
 app.use((err, req, res, next) => {

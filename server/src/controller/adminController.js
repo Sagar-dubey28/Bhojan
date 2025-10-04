@@ -1,6 +1,6 @@
 import Admin from "../models/adminModel.js";
 import bcrypt from "bcrypt";
-import { genToken } from "../utils/genToken.js";
+import genToken from "../utils/genToken.js";
 
 export const AdminLogin = async (req, res, next) => {
   try {
@@ -35,7 +35,7 @@ export const AdminLogin = async (req, res, next) => {
       admin: {
         fullName: admin.fullName,
         email: admin.email,
-        photo: admin.photo,
+        profilePic: admin.profilePic,
         role: "admin",
       },
     });

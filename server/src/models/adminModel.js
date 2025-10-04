@@ -14,7 +14,7 @@ const adminSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    photo:{
+     profilePic:{
         type: String,
         default: "https://placehold.co/600x400/orange/white?font=montserrat&text=A",
     }
