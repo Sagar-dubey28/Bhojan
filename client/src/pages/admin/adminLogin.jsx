@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 
 const AdminLogin = () => {
-  const { setUser, setIsLogin } = useAuth();
+  const { setUser, setIsLogin, setIsAdmin } = useAuth();
 
  
 
@@ -30,6 +30,7 @@ const AdminLogin = () => {
       toast.success(res.data.message);
       setUser(res.data.admin);
       setIsLogin(true);
+      setIsAdmin(true);
       sessionStorage.setItem("BhojanUser", JSON.stringify(res.data.admin));
       navigate("/adminDashboard");
     } catch (error) {

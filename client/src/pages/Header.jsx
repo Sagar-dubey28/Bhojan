@@ -22,7 +22,7 @@ const themes = [
 ];
 
 const Header = () => {
-  const { user, isLogin } = useAuth();
+  const { user, isLogin,isAdmin } = useAuth();
   
   
 
@@ -87,7 +87,7 @@ const Header = () => {
            {isLogin && user ? (
           <div
             className="flex gap-3 items-center cursor-pointer"
-            onClick={() => navigate("/profilePage")}
+            onClick={() => (isAdmin)?navigate("/adminDashboard"):navigate("/profilePage")}
           >
             <div className="h-12 w-12 rounded-full border overflow-hidden">
               <img

@@ -9,7 +9,7 @@ import ForgetPasswordModal from "../pageModal/forgetPasswordModal";
 
 
 const LoginPage = () => {
-  const { setUser, setIsLogin } = useAuth();
+  const { setUser, setIsLogin  } = useAuth();
 
    const [isForgetpasswordModalOpen, setIsForgetpasswordModalOpen] =
     useState(false);

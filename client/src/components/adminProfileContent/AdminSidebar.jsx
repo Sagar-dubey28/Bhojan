@@ -49,6 +49,14 @@ const AdminSidebar = ({ active, setActive }) => {
             <li>
               <a
                 className="flex items-center px-4 py-2 rounded-lg hover:bg-primary hover:text-primary-content transition-all"
+                onClick={() => setActive("Overview")}
+              >
+                Overview
+              </a>
+            </li>
+            <li>
+              <a
+                className="flex items-center px-4 py-2 rounded-lg hover:bg-primary hover:text-primary-content transition-all"
                 onClick={() => setActive("Customer")}
               >
                 Manage Customer

@@ -7,16 +7,28 @@ export const AuthProvider = (props) => {
     JSON.parse(sessionStorage.getItem("BhojanUser") || null)
   );
   const [isLogin, setIsLogin] = useState(!user);
+   const [isAdmin, setIsAdmin] = useState(user?.role === "admin");
+
 
   useEffect(() => {
-    if (user) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
+    // if (user) {
+    //   setIsLogin(true);
+    // } else {
+    //   setIsLogin(false);
+    // }
+
+     setIsLogin(!!user);
+
+    // if (user && user.role === "admin") {
+    //   setIsAdmin(true);
+    // } else {
+    //   setIsAdmin(false);
+    // }
+
+    setIsAdmin(user?.role === "admin");
   }, [user]);
 
-  const value = {user,setUser,isLogin,setIsLogin};
+  const value = {user,setUser,isLogin,setIsLogin,isAdmin, setIsAdmin };
 
   return (<AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>);
 };

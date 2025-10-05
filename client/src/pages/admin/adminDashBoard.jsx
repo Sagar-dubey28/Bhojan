@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import  AdminSidebar  from "../../components/adminProfileContent/AdminSidebar";
+import AdminSidebar from "../../components/adminProfileContent/AdminSidebar";
 import ManageCustomer from "../../components/adminProfileContent/ManageCustomer";
 import ManageRider from "../../components/adminProfileContent/ManageRider";
 import ManageRestaurent from "../../components/adminProfileContent/ManageRestaurent";
 import ManageFeedBack from "../../components/adminProfileContent/ManageFeedBack";
-
-
+import Overview from "../../components/adminProfileContent/overview";
 
 const AdminDashBoard = () => {
-  const [active, setActive] = useState("Account");
+  const [active, setActive] = useState("Overview");
 
   return (
     <>
@@ -21,11 +20,11 @@ const AdminDashBoard = () => {
         {/* right side content */}
         <div className="flex-1 p-8 overflow-y-auto">
           <div className="max-w-5xl mx-auto space-y-8">
+            {active === "Overview" && <Overview />}
             {active === "Customer" && <ManageCustomer />}
             {active === "Rider" && <ManageRider />}
             {active === "Restaurent" && <ManageRestaurent />}
             {active === "Feedback" && <ManageFeedBack />}
-            
           </div>
         </div>
       </div>
