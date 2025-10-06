@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthProvider";
 import toast from "react-hot-toast";
 import api from "../../config/api";
+import { FaTruck } from "react-icons/fa";
+import { GrRestaurant } from "react-icons/gr";
+import { VscFeedback } from "react-icons/vsc";
+import { FaUserFriends } from "react-icons/fa";
+import { MdGridOn } from "react-icons/md";
 
 const AdminSidebar = ({ active, setActive }) => {
   const { setIsLogin, user, setUser } = useAuth();
@@ -51,7 +56,7 @@ const AdminSidebar = ({ active, setActive }) => {
                 className="flex items-center px-4 py-2 rounded-lg hover:bg-primary hover:text-primary-content transition-all"
                 onClick={() => setActive("Overview")}
               >
-                Overview
+                <MdGridOn /> Overview
               </a>
             </li>
             <li>
@@ -59,7 +64,7 @@ const AdminSidebar = ({ active, setActive }) => {
                 className="flex items-center px-4 py-2 rounded-lg hover:bg-primary hover:text-primary-content transition-all"
                 onClick={() => setActive("Customer")}
               >
-                Manage Customer
+               <FaUserFriends /> Manage Customer
               </a>
             </li>
             <li>
@@ -69,7 +74,7 @@ const AdminSidebar = ({ active, setActive }) => {
                   setActive("Rider");
                 }}
               >
-                Manage Rider
+               <FaTruck /> Manage Rider
               </a>
             </li>
             <li>
@@ -79,7 +84,7 @@ const AdminSidebar = ({ active, setActive }) => {
                   setActive("Restaurent");
                 }}
               >
-                Manage Restaurents
+                <GrRestaurant /> Manage Restaurents
               </a>
             </li>
             <li>
@@ -89,7 +94,7 @@ const AdminSidebar = ({ active, setActive }) => {
                   setActive("Feedback");
                 }}
               >
-                Manage Feedback
+               <VscFeedback /> Manage Feedback
               </a>
             </li>
           </ul>

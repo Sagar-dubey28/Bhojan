@@ -7,7 +7,7 @@ export const Protect = async (req, res, next) => {
 
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    console.log(decode);
+    // console.log(decode);
     if (!decode) {
       const error = new Error("Not Authorized, No Token Found");
       error.statusCode = 401;
@@ -22,7 +22,6 @@ export const Protect = async (req, res, next) => {
       throw error;
     }
 
-    console.log(verifiedUser);
 
     req.user = verifiedUser;
     next();

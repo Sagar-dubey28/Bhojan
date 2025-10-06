@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+     photoPublicId: {
+      type: String,
+    },
       gender: {
       type: String,
       enum: ["male", "female", "other"],
@@ -39,6 +42,14 @@ const userSchema = new mongoose.Schema(
       required: true,
       enum: ["veg", "non-veg", "eggetarian", "jain", "vegan", "any"],
       default: "veg",
+    },
+     status: {
+      type: String,
+      enum: ["active", "inactive", "blocked"],
+      default: "active",
+    },
+    Remarks: {
+      type: String,
     },
   },
   { timestamps: true }

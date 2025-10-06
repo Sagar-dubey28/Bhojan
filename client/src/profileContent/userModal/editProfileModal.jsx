@@ -16,7 +16,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     foodType: user.foodType || "",
   });
 
-  const [photo, setPhoto] = useState("");
+  const [profilePic, setProfilePic] = useState("");
   const [preview, setPreview] = useState("");
 
   const handleChange = (e) => {
@@ -28,7 +28,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     const file = e.target.files[0];
     const fileUrl = URL.createObjectURL(file);
     setPreview(fileUrl);
-    setPhoto(file);
+    setProfilePic(file);
   };
 
   const handleSubmit = async (e) => {
@@ -42,12 +42,14 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     formData.append("phone", editUser.phone);
     formData.append("dob", editUser.dob);
     formData.append("foodType", editUser.foodType);
-    if (photo) {
-      formData.append("photo", photo);
+    if (profilePic) {
+      formData.append("profilePic", profilePic);
     }
 
     try {
-      const res = await api.get("/user/updateUser", formData, {
+      console.log("form Data", formData);
+      
+      const res = await api.put("/user/updateUser", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -61,7 +63,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
         dob: user.dob || "",
         foodType: user.foodType || "",
       })
-      setPhoto("");
+      setProfilePic("");
       setPreview("");
       setUser(res.data.data);
       onClose();
