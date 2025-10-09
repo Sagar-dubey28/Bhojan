@@ -109,7 +109,7 @@ const AddRestaurentModal = ({ isOpen, onClose }) => {
         registerFromData.append("restaurantImages", file);
       });
 
-      const res = await api.post("/admin/addResturant", registerFromData, {
+      const res = await api.post("/admin/addRestaurent", registerFromData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success(res.data.message);

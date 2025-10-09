@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Restaurants from "../home/Restaurants";
 
 const HomePage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -17,6 +18,7 @@ const HomePage = () => {
   }, [foodImages.length]);
 
   return (
+<>
     <main className="flex flex-col md:flex-row items-center px-6 md:px-20 py-12 md:py-20 min-h-[calc(100vh-80px)] bg-base-100">
       {/* Left Content */}
       <div className="flex-1 pr-0 md:pr-16 text-center md:text-left mb-10 md:mb-0">
@@ -43,6 +45,8 @@ const HomePage = () => {
         ))}
       </div>
     </main>
+    <Restaurants/>
+</>
   );
 };
 

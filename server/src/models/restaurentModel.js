@@ -39,7 +39,10 @@ const resturantSchema = mongoose.Schema(
       default: "9876543210",
     },
     managerImage: {
-      type: String,
+        type: {
+        imageLink: { type: String, required: true },
+        imageId: { type: String, required: true },
+      },
       required: true,
     },
     receptionPhone: {
@@ -53,7 +56,12 @@ const resturantSchema = mongoose.Schema(
       default: "example@example.com",
     },
     images: {
-      type: [String],
+      type: [
+        {
+          imageLink: { type: String, required: true },
+          imageId: { type: String, required: true },
+        },
+      ],
       required: true,
     },
     status: {

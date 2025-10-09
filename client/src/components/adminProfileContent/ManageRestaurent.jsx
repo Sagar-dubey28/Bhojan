@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import AddRestaurentModal from "./modal/AddRestaurentModal";
 import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
 import EditRestaurentModal from "./modal/EditRestaurentModal";
 import ViewRestaurentModal from "./modal/ViewRestaurentModal";
+import api from "../../config/api";
+import toast from "react-hot-toast";
+
 
 const dummyData = [
   {
@@ -71,6 +74,17 @@ const ManageRestaurent = () => {
   const [isViewRestaurentModal, setIsViewRestaurentModal] = useState(false);
   const [resturants, setResturants] = useState(dummyData);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+
+  const fetchResturants = async () => {
+    try {
+      const response = await api.get("/admin/getallresturants");
+      toast.success(response.data.message);
+      setResturants(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
