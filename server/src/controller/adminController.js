@@ -219,3 +219,62 @@ export const GetAllRestaurents = async (req, res, next) => {
     next(error);
   }
 };
+
+export const DeleteRestaurant = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Validate id
+    if (!id) {
+      const error = new Error("Restaurant ID is required");
+      error.statusCode = 400;
+      return next(error);
+    }
+
+    // Find restaurant first to get image IDs
+    const restaurant = await Resturant.findById(id);
+    
+    if (!restaurant) {
+      const error = new Error("Restaurant not found");
+      error.statusCode = 404;
+      return next(error);
+    }
+
+    // Delete manager image from Cloudinary
+    if (restaurant.managerImage && restaurant.managerImage.imageId) {
+      try {
+        await cloudinary.uploader.destroy(restaurant.managerImage.imageId);
+      } catch (error) {
+        console.error('Error deleting manager image:', error);
+        // Continue with deletion even if image deletion fails
+      }
+    }
+
+    // Delete restaurant images from Cloudinary
+    if (restaurant.images && restaurant.images.length > 0) {
+      try {
+        const deletePromises = restaurant.images.map(image => 
+          cloudinary.uploader.destroy(image.imageId)
+        );
+        await Promise.all(deletePromises);
+      } catch (error) {
+        console.error('Error deleting restaurant images:', error);
+        // Continue with deletion even if image deletion fails
+      }
+    }
+
+    // Delete restaurant from database
+    await Resturant.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Restaurant deleted successfully"
+    });
+
+  } catch (error) {
+    console.error('Delete restaurant error:', error);
+    const serverError = new Error(error.message || "Internal Server Error");
+    serverError.statusCode = error.statusCode || 500;
+    next(serverError);
+  }
+};

@@ -1,10 +1,10 @@
-import React, { useState ,useEffect} from "react";
-import AddRestaurentModal from "./modal/AddRestaurentModal";
+import React, { useState, useEffect } from "react";
 import { FaEye, FaEdit, FaTrashAlt } from "react-icons/fa";
+import toast from "react-hot-toast";
+import api from "../../config/api";
+import AddRestaurentModal from "./modal/AddRestaurentModal";
 import EditRestaurentModal from "./modal/EditRestaurentModal";
 import ViewRestaurentModal from "./modal/ViewRestaurentModal";
-import api from "../../config/api";
-import toast from "react-hot-toast";
 
 
 const dummyData = [
@@ -72,18 +72,36 @@ const ManageRestaurent = () => {
   const [isAddResturantModalOpen, setIsAddResturantModalOpen] = useState(false);
   const [isEditRestaurentModal, setIsEditRestaurentModal] = useState(false);
   const [isViewRestaurentModal, setIsViewRestaurentModal] = useState(false);
-  const [resturants, setResturants] = useState(dummyData);
+  const [restaurant, setRestaurant] = useState(dummyData);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [restaurantToDelete, setRestaurantToDelete] = useState(null);
 
   const fetchResturants = async () => {
     try {
       const response = await api.get("/admin/getallresturants");
       toast.success(response.data.message);
-      setResturants(response.data.data);
+      setRestaurant(response.data.data);
     } catch (error) {
       console.log(error);
     }
   }
+  useEffect(() => {
+    fetchResturants();
+  }, []);
+
+  const handleDeleteRestaurant = async () => {
+    try {
+      await api.delete(`/admin/deleterestaurant/${restaurantToDelete._id}`);
+      toast.success('Restaurant deleted successfully');
+      fetchResturants();
+      setIsDeleteModalOpen(false);
+      setRestaurantToDelete(null);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Error deleting restaurant');
+      console.error('Delete error:', error);
+    }
+  };
 
   return (
     <>
@@ -109,7 +127,7 @@ const ManageRestaurent = () => {
             </tr>
           </thead>
           <tbody>
-            {resturants.map((restaurant, index) => (
+            {restaurant.map((restaurant, index) => (
               <tr key={index}>
                 <td>{restaurant.resturantName}</td>
                 <td>{restaurant.managerName}</td>
@@ -145,7 +163,13 @@ const ManageRestaurent = () => {
                   >
                     <FaEdit />
                   </button>
-                  <button className="btn btn-sm btn-error">
+                  <button 
+                    className="btn btn-sm btn-error"
+                    onClick={() => {
+                      setRestaurantToDelete(restaurant);
+                      setIsDeleteModalOpen(true);
+                    }}
+                  >
                     <FaTrashAlt />
                   </button>
                 </td>
@@ -158,6 +182,10 @@ const ManageRestaurent = () => {
       <AddRestaurentModal
         isOpen={isAddResturantModalOpen}
         onClose={() => setIsAddResturantModalOpen(false)}
+        onSuccess={() => {
+          setIsAddResturantModalOpen(false);
+          fetchResturants();
+        }}
       />
       <EditRestaurentModal
         isOpen={isEditRestaurentModal}
@@ -165,6 +193,12 @@ const ManageRestaurent = () => {
           setIsEditRestaurentModal(false);
           setSelectedRestaurant(null);
         }}
+        onSuccess={() => {
+          setIsEditRestaurentModal(false);
+          setSelectedRestaurant(null);
+          fetchResturants();
+        }}
+        restaurantData={selectedRestaurant}
       />
       <ViewRestaurentModal
         isOpen={isViewRestaurentModal}
@@ -174,6 +208,36 @@ const ManageRestaurent = () => {
         }}
         restaurantData={selectedRestaurant}
       />
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+            <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
+            <p className="mb-6">
+              Are you sure you want to delete the restaurant "{restaurantToDelete?.resturantName}"?
+              This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                className="btn btn-ghost"
+                onClick={() => {
+                  setIsDeleteModalOpen(false);
+                  setRestaurantToDelete(null);
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-error"
+                onClick={handleDeleteRestaurant}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
