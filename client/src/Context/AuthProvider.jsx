@@ -4,10 +4,13 @@ const AuthContext = React.createContext();
 
 export const AuthProvider = (props) => {
   const [user, setUser] = useState(
-    JSON.parse(sessionStorage.getItem("BhojanUser") || null)
+    JSON.parse(sessionStorage.getItem("BhojanUser")) || null
   );
-  const [isLogin, setIsLogin] = useState(!user);
-   const [isAdmin, setIsAdmin] = useState(user?.role === "admin");
+  const [isLogin, setIsLogin] = useState(!!user);
+  const [isAdmin, setIsAdmin] = useState(user?.role === "admin");
+  const [isRestaurant, setIsRestaurant] = useState(user?.role === "restaurant");
+  const [isRider, setIsRider] = useState(user?.role === "rider");
+
 
 
   useEffect(() => {
@@ -26,9 +29,22 @@ export const AuthProvider = (props) => {
     // }
 
     setIsAdmin(user?.role === "admin");
+    setIsRestaurant(user?.role === "restaurant");
+    setIsRider(user?.role === "rider");
   }, [user]);
 
-  const value = {user,setUser,isLogin,setIsLogin,isAdmin, setIsAdmin };
+  const value = {
+    user,
+    setUser,
+    isLogin,
+    setIsLogin,
+    isAdmin,
+    setIsAdmin,
+    isRestaurant,
+    setIsRestaurant,
+    isRider,
+    setIsRider
+  };
 
   return (<AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>);
 };

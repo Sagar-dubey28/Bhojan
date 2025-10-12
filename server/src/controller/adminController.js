@@ -84,7 +84,7 @@ export const AddRestaurent = async (req, res, next) => {
       !managerPhone ||
       !receptionPhone ||
       !email ||
-      password ||
+      !password ||
       !status ||
       !openingTime ||
       !closingTime ||
@@ -162,7 +162,7 @@ export const AddRestaurent = async (req, res, next) => {
         imageId: R_result.public_id,
       });
 
-       await Promise.all(restaurantImagesPromises);
+       await Promise.all(restaurantImages);
       
       
     });

@@ -34,7 +34,19 @@ const LoginPage = () => {
       
       setIsLogin(true);
       sessionStorage.setItem("BhojanUser", JSON.stringify(res.data.data));
-      navigate("/profilePage");
+      
+      // Navigate based on role
+      switch (loginData.role) {
+        case "restaurant":
+          navigate("/restaurantDashboard");
+          break;
+        case "rider":
+          navigate("/riderDashboard");
+          break;
+        default:
+          navigate("/profilePage");
+          break;
+      };
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || error.message);

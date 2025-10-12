@@ -4,6 +4,8 @@ import genToken from "../utils/genToken.js";
 import OTP from "../models/otpModel.js";
 import sendEmail from "../utils/sendemail.js";
 import { genForgetPassToken } from "../utils/genForgetPassToken.js";
+import Rider from "../models/riderModel.js";
+import Resturant from "../models/restaurentModel.js";
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -47,11 +49,27 @@ export const loginUser = async (req, res, next) => {
       error.statusCode = 404;
       return next(error);
     }
-
-    const findingUser = await User.findOne({ email : email.toLowerCase() });
+    
+    let findingUser;
+    
+    switch (role) {
+      case 'user':
+        findingUser = await User.findOne({ email: email.toLowerCase() });
+        break;
+      case 'restaurant':
+        findingUser = await Resturant.findOne({ email: email.toLowerCase() });
+        break;
+      case 'rider':
+        findingUser = await Rider.findOne({ email: email.toLowerCase() });
+        break;
+      default:
+        const error = new Error("Invalid role selected");
+        error.statusCode = 400;
+        return next(error);
+    }
 
     if (!findingUser) {
-      const error = new Error("User not Found ,Please Register");
+      const error = new Error(`${role} not found. Please register first.`);
       error.statusCode = 404;
       return next(error);
     }

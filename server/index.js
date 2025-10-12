@@ -4,6 +4,7 @@ import authRoutes from "./src/routes/authRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
 import publicRoutes from "./src/routes/publicRoutes.js";
+import restaurantRoutes from "./src/routes/restaurantRoutes.js";  
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
@@ -30,6 +31,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/public", publicRoutes);
+app.use("/api/restaurant", restaurantRoutes);  
 
 //our made middleware
 app.use((err, req, res, next) => {

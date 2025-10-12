@@ -12,7 +12,7 @@ export const getAllRestaurents = async (req, res, next) => {
     res.status(200).json({
       message: "All Restaurants Fetched Successfully",
       data: resturants,
-    });
+    });ewe
   } catch (error) {
     next(error);
   }
