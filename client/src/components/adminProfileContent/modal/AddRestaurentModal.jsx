@@ -16,6 +16,7 @@ const AddRestaurentModal = ({ isOpen, onClose }) => {
     managerPhone: "",
     receptionPhone: "",
     email: "",
+    password: "",
     status: "active",
     openingTime: "",
     closingTime: "",
@@ -87,6 +88,7 @@ const AddRestaurentModal = ({ isOpen, onClose }) => {
       registerFromData.append("managerPhone", resturantData.managerPhone);
       registerFromData.append("receptionPhone", resturantData.receptionPhone);
       registerFromData.append("email", resturantData.email);
+      registerFromData.append("password", resturantData.password); 
       registerFromData.append("status", resturantData.status);
       registerFromData.append("openingTime", resturantData.openingTime);
       registerFromData.append("closingTime", resturantData.closingTime);
@@ -249,6 +251,16 @@ const AddRestaurentModal = ({ isOpen, onClose }) => {
                       type="email"
                       className="input  w-full"
                       value={resturantData.email}
+                      onChange={handleChange}
+                    />
+                  </div>
+                   <div>
+                    <label className="block text-sm font-medium">Password</label>
+                    <input
+                      name="password"
+                      type="password"
+                      className="input  w-full"
+                      value={resturantData.password}
                       onChange={handleChange}
                     />
                   </div>

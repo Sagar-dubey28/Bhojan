@@ -29,6 +29,7 @@ export const registerUser = async (req, res, next) => {
       email,
       password: hashpassword,
       profilePic,
+      role: "user",
     });
 
     res.status(200).json({ message: "User Created Sucessfully" });
@@ -39,7 +40,7 @@ export const registerUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { role, email, password } = req.body;
 
     if (!email || !password) {
       const error = new Error("All Feilds Required");
@@ -47,7 +48,7 @@ export const loginUser = async (req, res, next) => {
       return next(error);
     }
 
-    const findingUser = await User.findOne({ email });
+    const findingUser = await User.findOne({ email : email.toLowerCase() });
 
     if (!findingUser) {
       const error = new Error("User not Found ,Please Register");
@@ -55,11 +56,11 @@ export const loginUser = async (req, res, next) => {
       return next(error);
     }
 
-    console.log("password match se phle");
+ 
 
     const passwordMatch = await bcrypt.compare(password, findingUser.password);
 
-    console.log(passwordMatch);
+    
 
     if (!passwordMatch) {
       const error = new Error("Invalid userName or password");
@@ -85,6 +86,7 @@ export const loginUser = async (req, res, next) => {
         dob: findingUser.dob,
         phone: findingUser.phone,
         foodType: findingUser.foodType,
+        role: findingUser.role
       },
     });
   } catch (error) {

@@ -60,6 +60,7 @@ export const AddRestaurent = async (req, res, next) => {
       managerPhone,
       receptionPhone,
       email,
+      password,
       status,
       openingTime,
       closingTime,
@@ -83,6 +84,7 @@ export const AddRestaurent = async (req, res, next) => {
       !managerPhone ||
       !receptionPhone ||
       !email ||
+      password ||
       !status ||
       !openingTime ||
       !closingTime ||
@@ -139,7 +141,7 @@ export const AddRestaurent = async (req, res, next) => {
     
     const restaurantImages = [];
     // Upload Restaurant Images to Cloudinary
-      await restaurantImageFiles.forEach(async (image) => {
+      await restaurantImageFiles.map(async (image) => {
       const R_b64 = Buffer.from(image.buffer).toString("base64");
       const R_dataURI = `data:${image.mimetype};base64,${R_b64}`;
       const R_result = await cloudinary.uploader.upload(R_dataURI, {
@@ -159,11 +161,13 @@ export const AddRestaurent = async (req, res, next) => {
         imageLink: R_result.secure_url,
         imageId: R_result.public_id,
       });
+
+       await Promise.all(restaurantImagesPromises);
       
       
     });
     console.log("yha tkk poch gya hun");
-    
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create new Resturant
     const newResturant = await Resturant.create({
@@ -177,6 +181,7 @@ export const AddRestaurent = async (req, res, next) => {
       managerPhone,
       receptionPhone,
       email,
+      password: hashedPassword,
       status,
       openingTime,
       closingTime,

@@ -43,6 +43,11 @@ const userSchema = new mongoose.Schema(
       enum: ["veg", "non-veg", "eggetarian", "jain", "vegan", "any"],
       default: "veg",
     },
+     role: {
+      type: String,
+      enum: ["user", "restaurant", "rider"],
+      required: true,
+    },
      status: {
       type: String,
       enum: ["active", "inactive", "blocked"],

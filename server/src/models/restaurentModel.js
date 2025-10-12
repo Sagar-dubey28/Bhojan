@@ -15,7 +15,7 @@ const resturantSchema = mongoose.Schema(
       required: true,
     },
     lon: {
-      type: String ,
+      type: String,
       required: true,
     },
     cuisine: {
@@ -39,7 +39,7 @@ const resturantSchema = mongoose.Schema(
       default: "9876543210",
     },
     managerImage: {
-        type: {
+      type: {
         imageLink: { type: String, required: true },
         imageId: { type: String, required: true },
       },
@@ -55,6 +55,11 @@ const resturantSchema = mongoose.Schema(
       required: true,
       default: "example@example.com",
     },
+    password: {
+      type: String,
+      required: true,
+    },
+
     images: {
       type: [
         {

@@ -1,6 +1,9 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import Admin from "../models/adminModel.js"
+import Resturant from "../models/restaurentModel.js";
+import Rider from "../models/riderModel.js";
+
 
 export const Protect = async (req, res, next) => {
   try {
@@ -36,7 +39,7 @@ export const ProtectFP = async (req, res, next) => {
     const token = req.cookies.BhojanFp;
 
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    console.log(decode);
+  
     
 
     if (!decode) {
@@ -44,7 +47,19 @@ export const ProtectFP = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    const verifiedUser = await User.findOne(decode.email);
+     const { role } = req.body;
+     
+     
+    let verifiedUser;
+    if (role === "user") {
+      verifiedUser = await User.findOne(decode.email);
+      console.log(verifiedUser);
+      
+    } else if (role === "resturant") {
+      verifiedUser = await Resturant.findOne(decode.email);
+    } else if (role === "rider") {
+      verifiedUser = await Rider.findOne(decode.email);
+    }
 
     if (!verifiedUser) {
       const error = new Error("Not Authorized, Invalid User");
