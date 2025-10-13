@@ -7,13 +7,17 @@ import {
   sendOtp,
   verifyOtp,
   forgetPassword,
+  RestaurantLogin,
+  RiderLogin,
 } from "../controller/authController.js";
 import { Protect, ProtectFP } from "../middleware/userMiddleware.js";
 
 const router = express.Router();
 
 router.post("/register", registerUser);
-router.post("/login", loginUser);
+router.post("/customer/login", loginUser);
+router.post("/restaurant/login", RestaurantLogin);
+router.post("/rider/login", RiderLogin);
 router.post("/logout", logout);
 
 router.post("/resetPassword", Protect, resetPassword);

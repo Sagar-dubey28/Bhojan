@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import {
   FiEdit2,
   FiMapPin,
@@ -14,19 +14,19 @@ import RestaurantEditModal from "../restaurantDashboard/modals/RestaurantEditMod
 
 const Profile = () => {
   const { user } = useAuth();
+
+  
   const [restaurantData, setRestaurantData] = useState(null);
 
   const [restaurantEditModalOpen, setRestaurantEditModalOpen] = useState(false);
   const [editArea, setEditArea] = useState("Profile");
-
+ 
+  
+  
   useEffect(() => {
-    if (user && user.role === "restaurant") {
-        console.log(user);
-        
-      setRestaurantData(user);
-    }
+    setRestaurantData(user);
   }, [user]);
-
+  
   const getFoodTypeBadge = (type) => {
     const badges = {
       veg: "badge-success",
@@ -141,7 +141,7 @@ const Profile = () => {
                   <button
                     className="text-primary"
                     onClick={() => {
-                      setResturantEditModalOpen(true), setEditArea("Basic");
+                      setRestaurantEditModalOpen(true), setEditArea("Basic");
                     }}
                   >
                     <FiEdit2 />
@@ -212,7 +212,7 @@ const Profile = () => {
                   <button
                     className="text-primary"
                     onClick={() => {
-                      setResturantEditModalOpen(true), setEditArea("Manager");
+                      setRestaurantEditModalOpen(true), setEditArea("Manager");
                     }}
                   >
                     <FiEdit2 />
@@ -268,7 +268,7 @@ const Profile = () => {
                   <button
                     className="text-primary"
                     onClick={() => {
-                      setResturantEditModalOpen(true),
+                      setRestaurantEditModalOpen(true),
                         setEditArea("OperatingHours");
                     }}
                   >
@@ -316,7 +316,7 @@ const Profile = () => {
                   <button
                     className="text-primary"
                     onClick={() => {
-                      setResturantEditModalOpen(true),
+                      setRestaurantEditModalOpen(true),
                         setEditArea("LegalBanking");
                     }}
                   >
@@ -367,7 +367,7 @@ const Profile = () => {
                 <button
                   className="text-primary"
                   onClick={() => {
-                    setResturantEditModalOpen(true), setEditArea("Location");
+                    setRestaurantEditModalOpen(true), setEditArea("Location");
                   }}
                 >
                   <FiEdit2 />

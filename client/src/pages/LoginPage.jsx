@@ -27,7 +27,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const res = await api.post("/auth/login", loginData);
+      const res = await api.post(`/auth/${loginData.role}/login`, loginData);
       toast.success(res.data.message);
       setUser(res.data.data);
       console.log(res.data.data);

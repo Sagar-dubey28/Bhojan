@@ -42,70 +42,51 @@ export const registerUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   try {
-    const { role, email, password } = req.body;
+    const { email, password } = req.body;
 
     if (!email || !password) {
-      const error = new Error("All Feilds Required");
-      error.statusCode = 404;
+      const error = new Error("All fields are required");
+      error.statusCode = 400;
       return next(error);
     }
-    
-    let findingUser;
-    
-    switch (role) {
-      case 'user':
-        findingUser = await User.findOne({ email: email.toLowerCase() });
-        break;
-      case 'restaurant':
-        findingUser = await Resturant.findOne({ email: email.toLowerCase() });
-        break;
-      case 'rider':
-        findingUser = await Rider.findOne({ email: email.toLowerCase() });
-        break;
-      default:
-        const error = new Error("Invalid role selected");
-        error.statusCode = 400;
-        return next(error);
-    }
+
+    const findingUser = await User.findOne({ email: email.toLowerCase() });
 
     if (!findingUser) {
-      const error = new Error(`${role} not found. Please register first.`);
+      const error = new Error("User not found. Please register first.");
       error.statusCode = 404;
       return next(error);
     }
 
- 
-
     const passwordMatch = await bcrypt.compare(password, findingUser.password);
-
-    
-
     if (!passwordMatch) {
-      const error = new Error("Invalid userName or password");
+      const error = new Error("Invalid email or password");
       error.statusCode = 401;
       return next(error);
     }
-   
 
+    // Generate token
     if (!genToken(findingUser._id, res)) {
       const error = new Error("Unable to login");
       error.statusCode = 403;
       return next(error);
     }
-    
+
+    // Prepare data
+    const responseData = {
+      fullName: findingUser.fullName,
+      email: findingUser.email,
+      profilePic: findingUser.profilePic,
+      gender: findingUser.gender,
+      dob: findingUser.dob,
+      phone: findingUser.phone,
+      foodType: findingUser.foodType,
+      role: findingUser.role,
+    };
 
     res.status(200).json({
-      message: `welcome back, ${findingUser.fullName}`,
-      data: {
-        fullName: findingUser.fullName,
-        email: findingUser.email,
-        profilePic: findingUser.profilePic,
-        gender: findingUser.gender,
-        dob: findingUser.dob,
-        phone: findingUser.phone,
-        foodType: findingUser.foodType,
-        role: findingUser.role
-      },
+      message: `Welcome back, ${findingUser.fullName}`,
+      data: responseData,
     });
   } catch (error) {
     next(error);
@@ -253,6 +234,87 @@ export const forgetPassword = async (req, res, next) => {
 
     res.clearCookie("BhojanFp");
     res.status(200).json({ message: "Password Change Successful" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const RestaurantLogin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      const error = new Error("Email and Password are required");
+      error.statusCode = 400;
+      return next(error);
+    }
+    const existingResturant = await Resturant.findOne({ email });
+    if (!existingResturant) {
+      const error = new Error("Resturant not found");
+      error.statusCode = 404;
+      return next(error);
+    }
+
+    const isVerified = await bcrypt.compare(
+      password,
+      existingResturant.password
+    );
+    if (!isVerified) {
+      const error = new Error("Invalid Password");
+      error.statusCode = 401;
+      return next(error);
+    }
+
+    //manually add the role field
+    existingResturant.role = "resturant";
+
+    if (!genToken(existingResturant._id, res)) {
+      const error = new Error("Unable to Login");
+      error.statusCode = 403;
+      return next(error);
+    }
+
+    console.log(existingResturant);
+
+    res.status(200).json({
+      message: "Resturant Logged In Successfully",
+      data: existingResturant,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const RiderLogin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      const error = new Error("Email and Password are required");
+      error.statusCode = 400;
+      return next(error);
+    }
+    const existingRider = await Rider.findOne({ email });
+    if (!existingRider) {
+      const error = new Error("Rider not found");
+      error.statusCode = 404;
+      return next(error);
+    }
+    const isVerified = await bcrypt.compare(password, existingRider.password);
+    if (!isVerified) {
+      const error = new Error("Invalid Password");
+      error.statusCode = 401;
+      return next(error);
+    }
+    if (!genToken(existingRider._id, res)) {
+      const error = new Error("Unable to Login");
+      error.statusCode = 403;
+      return next(error);
+    }
+
+    existingRider.role = "rider";
+    res.status(200).json({
+      message: "Rider Logged In Successfully",
+      data: existingRider,
+    });
   } catch (error) {
     next(error);
   }
