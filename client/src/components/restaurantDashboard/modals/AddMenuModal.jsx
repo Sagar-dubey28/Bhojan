@@ -4,7 +4,7 @@ import { FiUpload } from "react-icons/fi";
 import api from "../../../config/api";
 import toast from "react-hot-toast";
 
-const AddMenuModal = ({ isOpen, onClose }) => {
+const AddMenuModal = ({ isOpen, onClose, restaurantId }) => {
   const [menuData, setMenuData] = useState({
     name: "",
     description: "",
@@ -22,19 +22,16 @@ const AddMenuModal = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    
-    if (type === "number") {
-      setMenuData((prev) => ({ ...prev, [name]: Number(value) }));
-      return;
-    }
-
-    if (type === "checkbox") {
-      setMenuData((prev) => ({ ...prev, [name]: e.target.checked }));
-      return;
-    }
-
-    setMenuData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setMenuData((prev) => ({
+      ...prev,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : type === "number"
+          ? Number(value)
+          : value,
+    }));
   };
 
   const handleImageChange = (e) => {
@@ -47,6 +44,11 @@ const AddMenuModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!restaurantId) {
+      toast.error("Restaurant ID missing!");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -56,13 +58,16 @@ const AddMenuModal = ({ isOpen, onClose }) => {
       Object.keys(menuData).forEach(key => {
         formData.append(key, menuData[key]);
       });
+      
+      // Append restaurant ID
+      formData.append('restaurantId', restaurantId);
 
-      // Append dish image if exists
+      // Append image if exists
       if (dishImageFile) {
         formData.append('dishImage', dishImageFile);
       }
 
-      const response = await api.post('/restaurant/add-menu-item', formData, {
+      const response = await api.post("/restaurant/menu/add", formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -71,6 +76,7 @@ const AddMenuModal = ({ isOpen, onClose }) => {
       toast.success("Menu item added successfully");
       onClose();
     } catch (error) {
+      console.error(error);
       toast.error(error.response?.data?.message || "Failed to add menu item");
     } finally {
       setIsLoading(false);
@@ -84,16 +90,13 @@ const AddMenuModal = ({ isOpen, onClose }) => {
       <div className="bg-white rounded-lg w-full max-w-2xl p-6 max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Add Menu Item</h2>
-          <button
-            className="text-error text-2xl"
-            onClick={onClose}
-          >
+          <button className="text-error text-2xl" onClick={onClose}>
             <IoIosCloseCircle />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Image Upload Section */}
+          {/* Image Upload */}
           <div className="flex flex-col items-center space-y-4 p-4 border rounded-lg">
             {dishImagePreview && (
               <div className="w-40 h-40 rounded-lg overflow-hidden">
@@ -116,97 +119,36 @@ const AddMenuModal = ({ isOpen, onClose }) => {
             </label>
           </div>
 
-          {/* Basic Information */}
+          {/* Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Dish Name</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                className="input input-bordered"
-                value={menuData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Category</span>
-              </label>
-              <input
-                type="text"
-                name="category"
-                className="input input-bordered"
-                value={menuData.category}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Price (₹)</span>
-              </label>
-              <input
-                type="number"
-                name="price"
-                className="input input-bordered"
-                value={menuData.price}
-                onChange={handleChange}
-                required
-                min="0"
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Preparation Time (minutes)</span>
-              </label>
-              <input
-                type="number"
-                name="preparationTime"
-                className="input input-bordered"
-                value={menuData.preparationTime}
-                onChange={handleChange}
-                required
-                min="0"
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Serving Size</span>
-              </label>
-              <input
-                type="text"
-                name="servingSize"
-                className="input input-bordered"
-                value={menuData.servingSize}
-                onChange={handleChange}
-                placeholder="e.g., 1 plate, 250g"
-                required
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Cuisine</span>
-              </label>
-              <input
-                type="text"
-                name="cuisine"
-                className="input input-bordered"
-                value={menuData.cuisine}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            {[
+              { label: "Dish Name", name: "name", type: "text" },
+              { label: "Category", name: "category", type: "text" },
+              { label: "Price (₹)", name: "price", type: "number" },
+              {
+                label: "Preparation Time (minutes)",
+                name: "preparationTime",
+                type: "number",
+              },
+              { label: "Serving Size", name: "servingSize", type: "text" },
+              { label: "Cuisine", name: "cuisine", type: "text" },
+            ].map((input) => (
+              <div key={input.name} className="form-control">
+                <label className="label">
+                  <span className="label-text">{input.label}</span>
+                </label>
+                <input
+                  type={input.type}
+                  name={input.name}
+                  className="input input-bordered"
+                  value={menuData[input.name]}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            ))}
           </div>
 
-          {/* Description */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Description</span>
@@ -245,7 +187,7 @@ const AddMenuModal = ({ isOpen, onClose }) => {
             </label>
           </div>
 
-          {/* Submit Button */}
+          {/* Buttons */}
           <div className="flex justify-end gap-4">
             <button
               type="button"

@@ -38,7 +38,7 @@ const RestaurantDashboard = () => {
           <div className="border w-full p-4">
             {active === "overview" && <Overview />}
             {active === "profile" && <Profile />}
-            {active === "menu" && <Menu />}
+            {active === "menu" && <Menu  />}
             {active === "orders" && <Orders />}
             {active === "transactions" && <Transactions />}
             {active === "feedback" && <Feedback />}

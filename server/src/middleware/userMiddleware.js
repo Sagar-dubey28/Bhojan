@@ -11,7 +11,7 @@ export const Protect = async (req, res, next) => {
 
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    // console.log(decode);
+     console.log(decode);
     if (!decode) {
       const error = new Error("Not Authorized, No Token Found");
       error.statusCode = 401;
@@ -20,8 +20,11 @@ export const Protect = async (req, res, next) => {
 
     const verifiedUser = await User.findById(decode.id);
 
+    console.log(verifiedUser);
+    
+
     if (!verifiedUser) {
-      const error = new Error("Not Authorized, Invalid User");
+      const error = new Error("AuthNot orized, Invalid User");
       error.statusCode = 401;
       throw error;
     }
