@@ -11,6 +11,8 @@ import AdminDashBoard from "./pages/admin/adminDashBoard";
 import RestaurantDashboard from "./pages/Restaurantdashboard";
 import Restaurants from "./home/Restaurants";
 import RestaurantDetails from "./home/RestaurantDetails";
+import AddToCartPage from "./pages/cart/AddToCartPage";
+import PaymentSuccess from "./pages/cart/PaymentSuccess";
 //sagar-dubey
 
 //changes by github
@@ -29,6 +31,8 @@ function App() {
           <Route path="/adminDashboard" element={<AdminDashBoard />} />
           <Route path="/restaurants" element={<Restaurants />} />
           <Route path="/restaurantDetails" element={<RestaurantDetails />} />
+          <Route path="/addToCart" element={<AddToCartPage />} />
+          <Route path="/paymentSuccess" element={<PaymentSuccess />} />
 
           <Route
             path="/restaurantDashboard"

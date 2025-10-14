@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import api from "../config/api";
 import toast from "react-hot-toast";
+import { useCart } from "../Context/cartContext";
 
 const RestaurantDetails = () => {
   // normalize incoming state (support typo and different keys)
+  const { addToCart, cartItems } = useCart();
   const location = useLocation();
   const state = location.state || {};
   const selectedResturant = state.selectedResturant || null;
   const restaurantIdFromState = state.restaurantId || null;
+  
+  // Calculate total cart quantity
+  const cartQuantity = cartItems.reduce((total, item) => total + (item.quantity || 0), 0);
 
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -304,8 +309,14 @@ const RestaurantDetails = () => {
                   <span className="text-primary font-bold text-lg">
                     ₹{item.price}
                   </span>
-                  <button className="btn btn-sm btn-primary">
-                    Add to Cart
+                  <button className="btn btn-sm btn-primary gap-2" onClick={() => {
+                    addToCart(item);
+                    toast.success(`${item.name} added to cart`);
+                  }}>
+                    <span>Add to Cart</span>
+                    {cartQuantity > 0 && (
+                      <span className="badge badge-sm">{cartQuantity}</span>
+                    )}
                   </button>
                 </div>
               </div>

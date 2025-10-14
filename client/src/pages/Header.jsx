@@ -2,6 +2,7 @@ import { Search, ShoppingCart } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthProvider";
+import { useCart } from "../Context/cartContext";
 
 const themes = [
   "light",
@@ -22,12 +23,18 @@ const themes = [
 ];
 
 const Header = () => {
-  const { user, isLogin, isAdmin, isResturant, isRider } = useAuth();
-
+  const { user, isLogin, isAdmin, isRestaurant, isRider } = useAuth();
+  const { cartItems } = useCart();
   const navigate = useNavigate();
 
   const [theme, setTheme] = useState(
     localStorage.getItem("BhojanTheme") || "light"
+  );
+
+  // Calculate total items in cart
+  const cartItemsCount = cartItems.reduce(
+    (total, item) => total + (item.quantity || 1),
+    0
   );
 
   const handleThemeChange = (selectedTheme) => {
@@ -74,31 +81,38 @@ const Header = () => {
       {/* Right - Cart, Login + Theme */}
       <div className="flex items-center gap-3">
         <NavLink
-          to="/cart"
-          className="p-2 rounded-lg text-base-content"
+          to="/addToCart"
+          className="p-2 rounded-lg text-base-content relative"
           aria-label="View Cart"
         >
           <ShoppingCart className="w-6 h-6 text-base-content" />
+          {cartItemsCount > 0 && (
+            <div className="absolute -top-1 -right-1 bg-primary text-primary-content rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+              {cartItemsCount}
+            </div>
+          )}
         </NavLink>
 
         <div>
           {isLogin && user ? (
             <div
               className="flex gap-3 items-center cursor-pointer"
-              onClick={() =>
-                isAdmin
-                  ? navigate("/adminDashboard")
-                  : isResturant
-                  ? navigate("/resturantdashboard")
-                  : isRider
-                  ? navigate("/riderdashboard")
-                  : navigate("/profilePage")
-              }
+              onClick={() => {
+                if (isAdmin) {
+                  navigate("/adminDashboard");
+                } else if (isRestaurant) {
+                  navigate("/restaurantDashboard");
+                } else if (isRider) {
+                  navigate("/riderDashboard");
+                } else {
+                  navigate("/profilePage");
+                }
+              }}
             >
               <div className="h-12 w-12 rounded-full border overflow-hidden">
                 <img
                   src={
-                    isResturant
+                    isRestaurant
                       ? user?.managerImage.imageLink
                       : user?.profilePic
                   }
@@ -108,7 +122,7 @@ const Header = () => {
               </div>
 
               <span className="text-primary text-xl">
-               {isResturant
+                {isRestaurant
                   ? user?.resturantName
                   : user?.fullName?.split(" ")[0]}
               </span>

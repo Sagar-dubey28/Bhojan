@@ -5,6 +5,7 @@ import userRoutes from "./src/routes/userRoutes.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
 import publicRoutes from "./src/routes/publicRoutes.js";
 import restaurantRoutes from "./src/routes/restaurantRoutes.js";  
+import paymentRoute from "./src/routes/PaymentRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
@@ -22,6 +23,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
+app.get("/api/getkey", (req, res) =>
+  res.status(200).json({ key: process.env.RAZORPAY_API_KEY })
+);
+
 app.get("/", (req, res) => {
   res.json({ message: "server Connected" });
 });
@@ -32,6 +37,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/public", publicRoutes);
 app.use("/api/restaurant", restaurantRoutes);  
+app.use("/api/payment", paymentRoute);
 
 //our made middleware
 app.use((err, req, res, next) => {
