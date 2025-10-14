@@ -12,6 +12,8 @@ import RestaurantDashboard from "./pages/Restaurantdashboard";
 import Restaurants from "./home/Restaurants";
 import RestaurantDetails from "./home/RestaurantDetails";
 //sagar-dubey
+
+//changes by github
 function App() {
   return (
     <>
