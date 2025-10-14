@@ -34,6 +34,18 @@ const AddToCartPage = () => {
     }
   };
 
+  const verifyPayment = async (response) => {
+    try {
+      const { data } = await api.post("/payment/paymentverification", response);
+      if (data.success) {
+        window.location.href = `/paymentsuccess?reference=${response.razorpay_payment_id}`;
+      }
+    } catch (error) {
+      console.error("Verification error:", error);
+      toast.error("Payment verification failed");
+    }
+  };
+
   const checkoutHandler = async () => {
     try {
       const { data: { key } } = await api.get("/payment/getkey");
@@ -49,7 +61,9 @@ const AddToCartPage = () => {
         name: "Bhojan",
         description: "Food Order Payment",
         order_id: order.id,
-        callback_url: `${window.location.origin}/api/payment/paymentverification`,
+        handler: function (response) {
+          verifyPayment(response);
+        },
         prefill: {
           name: "Customer",
           email: "customer@example.com",
