@@ -8,8 +8,9 @@ import ProfilePage from "./pages/ProfilePage";
 import { Toaster } from "react-hot-toast";
 import AdminLogin from "./pages/admin/adminLogin";
 import AdminDashBoard from "./pages/admin/adminDashBoard";
-import Restaurant from "./pages/Restaurant";
 import RestaurantDashboard from "./pages/Restaurantdashboard";
+import Restaurants from "./home/Restaurants";
+import RestaurantDetails from "./home/RestaurantDetails";
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
           <Route path="/profilePage" element={<ProfilePage />} />
           <Route path="/adminLogin" element={<AdminLogin />} />
           <Route path="/adminDashboard" element={<AdminDashBoard />} />
-          <Route path="/restaurants" element={<Restaurant />} />
+          <Route path="/restaurants" element={<Restaurants />} />
+          <Route path="/restaurantDetails" element={<RestaurantDetails />} />
 
           <Route
             path="/restaurantDashboard"

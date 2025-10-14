@@ -28,26 +28,25 @@ const upload = multer();
 
 const router = express.Router();
 
-// ✅ Test Route
 router.get("/", (req, res) => {
   res.status(200).json({ message: "Restaurant Route Working" });
 });
 
-// ================== 🍽 MENU ROUTES ==================
 
-// ➕ Add new menu item for a restaurant
+
+
 router.post("/menu/add", upload.single("dishImage"), addMenu);
 
-// 📜 Get all menu items of a specific restaurant
+
 router.get("/menu/:restaurantId", getMenuByRestaurant);
 
-// 📜 Get menu items for logged-in restaurant
+
 router.get("/menu" , getMenuByRestaurant);
 
-// ✏️ Update menu item
+
 router.put("/menu/update/:id",  upload.single("dishImage"), updateMenu);
 
-// 🗑️ Delete a menu item
+
 router.delete("/menu/delete/:id", deleteMenu);
 
 

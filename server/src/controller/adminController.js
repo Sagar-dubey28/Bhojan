@@ -73,6 +73,8 @@ export const AddRestaurent = async (req, res, next) => {
       bankAccNumber,
       ifscCode,
     } = req.body;
+
+    // ✅ Field validation
     if (
       !resturantName ||
       !address ||
@@ -97,80 +99,56 @@ export const AddRestaurent = async (req, res, next) => {
       !bankAccNumber ||
       !ifscCode
     ) {
-      const error = new Error("All Fields are Required");
-      error.statusCode = 404;
-      return next(error);
+      return next(new Error("All fields are required"));
     }
-
-    // console.log("managerImageFiles:", req.files.managerImage);
-    // console.log("restaurantImageFiles:", req.files.restaurantImages);
 
     const managerImageFile = req.files.managerImage;
     const restaurantImageFiles = req.files.restaurantImages;
+
     if (!managerImageFile || restaurantImageFiles.length === 0) {
-      const error = new Error("All Images are Required");
-      error.statusCode = 404;
-      return next(error);
+      return next(new Error("All images are required"));
     }
-    
-     
-    // Upload Manager Image to Cloudinary
+
+    // ✅ Upload Manager Image to Cloudinary
     const M_b64 = Buffer.from(managerImageFile[0].buffer).toString("base64");
     const M_dataURI = `data:${managerImageFile[0].mimetype};base64,${M_b64}`;
     const M_result = await cloudinary.uploader.upload(M_dataURI, {
-      folder: `BhojanAdmin/Resturants/${resturantName.trim()}`,
+      folder: `BhojanAdmin/Restaurants/${resturantName.trim()}`,
       width: 500,
       height: 500,
       crop: "fill",
     });
-    
-    
-    if (!M_result) {
-      const error = new Error("Manager Image Upload Failed");
-      error.statusCode = 500;
-      return next(error);
-    }
-    
-   
 
     const managerImage = {
       imageLink: M_result.secure_url,
       imageId: M_result.public_id,
     };
-    
-    
-    const restaurantImages = [];
-    // Upload Restaurant Images to Cloudinary
-      await restaurantImageFiles.map(async (image) => {
+
+    // ✅ Upload Restaurant Images (wait for all)
+    const uploadPromises = restaurantImageFiles.map(async (image) => {
       const R_b64 = Buffer.from(image.buffer).toString("base64");
       const R_dataURI = `data:${image.mimetype};base64,${R_b64}`;
       const R_result = await cloudinary.uploader.upload(R_dataURI, {
-        folder: `BhojanAdmin/Resturants/${resturantName}`,
+        folder: `BhojanAdmin/Restaurants/${resturantName.trim()}`,
         width: 500,
         height: 500,
         crop: "fill",
       });
-   
-      
-      if (!R_result) {
-        const error = new Error("Restaurant Image Upload Failed");
-        error.statusCode = 500;
-        return next(error);
-      }
-      restaurantImages.push({
+
+      return {
         imageLink: R_result.secure_url,
         imageId: R_result.public_id,
-      });
-
-       await Promise.all(restaurantImages);
-      
-      
+      };
     });
-    console.log("yha tkk poch gya hun");
+
+    // ✅ Wait for all uploads to complete
+    const restaurantImages = await Promise.all(uploadPromises);
+
+    // ✅ Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create new Resturant
-    const newResturant = await Resturant.create({
+    // ✅ Create new restaurant
+    const newRestaurant = await Resturant.create({
       resturantName,
       address,
       lat,
@@ -194,18 +172,21 @@ export const AddRestaurent = async (req, res, next) => {
       bankAccNumber,
       ifscCode,
       managerImage,
-      images:restaurantImages,
+      images: restaurantImages,
     });
-    res.status(200).json({
-      message: "Add Resturant Route",
-      data: newResturant,
+
+    res.status(201).json({
+      success: true,
+      message: "Restaurant added successfully ✅",
+      data: newRestaurant,
     });
-    console.log("chl gya hun");
-    
+
   } catch (error) {
+    console.error("❌ AddRestaurant Error:", error);
     next(error);
   }
 };
+
 
 export const GetAllRestaurents = async (req, res, next) => {
   try {
