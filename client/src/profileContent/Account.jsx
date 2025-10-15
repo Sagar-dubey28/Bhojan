@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import ResetPassword from "./userModal/resetPasswordModal";
-import EditProfileModal from "./userModal/EditProfileModal";
+import EditProfileModal from "./userModal/editProfileModal";
 import { useAuth } from "../Context/AuthProvider";
 
 const Account = () => {
