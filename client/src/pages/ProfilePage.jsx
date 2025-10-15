@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Account from "../profileContent/Account";
 import Sidebar from "./Sidebar";
 import Address from "../profileContent/Address";
-import Review from "../profileContent/review";
+import Review from "../profileContent/Review";
 import ContactUs from "../profileContent/ContactUs";
 import Order from "../profileContent/Order";
 
