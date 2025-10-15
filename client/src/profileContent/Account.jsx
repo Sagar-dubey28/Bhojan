@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import ResetPasswordModal from "./userModal/ResetPasswordModal";
+import ResetPasswordModal from "./userModal/resetPasswordModal";
 import EditProfileModal from "./userModal/EditProfileModal";
 import { useAuth } from "../Context/AuthProvider";
 
