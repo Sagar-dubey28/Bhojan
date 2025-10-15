@@ -240,6 +240,7 @@ const RestaurantDetails = () => {
         {/* Restaurant Images Gallery */}
         <div className="container mx-auto px-4 mt-10 relative z-10">
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          
             {(currentRestaurant.images || restaurantData.images)
               .slice(1, 4)
               .map((image, index) => (
@@ -260,7 +261,7 @@ const RestaurantDetails = () => {
 
       {/* Header */}
       <h2 className="text-4xl font-bold mb-4 text-center">
-        {currentRestaurant?.resturantName || "Restaurant Name"}
+        {currentRestaurant?.resturantName || "Restaurant Name"} Menu
       </h2>
 
       {/* Loading Spinner */}
@@ -269,7 +270,10 @@ const RestaurantDetails = () => {
           <span className="loading loading-spinner loading-lg text-primary"></span>
         </div>
       ) : menuItems && menuItems.length > 0 ? (
+        <>
+       
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          
           {menuItems.map((item, idx) => (
             <div
               key={item._id || item.id || idx}
@@ -323,6 +327,7 @@ const RestaurantDetails = () => {
             </div>
           ))}
         </div>
+        </>
       ) : (
         <p className="text-center text-base-content/70">
           No menu items available.

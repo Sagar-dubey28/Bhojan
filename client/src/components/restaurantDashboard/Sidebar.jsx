@@ -1,7 +1,13 @@
 import React from "react";
-import { FiHome, FiUser, FiMenu, FiShoppingCart, FiCreditCard, FiMessageSquare, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiHome, FiUser, FiMenu, FiShoppingCart, FiCreditCard, FiMessageSquare, FiChevronLeft, FiChevronRight, FiLogOut } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../Context/AuthProvider";
+import api from "../../config/api";
+import toast from "react-hot-toast";
 
 const Sidebar = ({ active, setActive, isSideMenuOpen, setIsSideMenuOpen }) => {
+  const navigate = useNavigate();
+  const { setIsLogin, setUser, setIsRestaurant } = useAuth();
   const items = [
     { key: "overview", label: "Overview", icon: <FiHome /> },
     { key: "profile", label: "Profile", icon: <FiUser /> },
@@ -10,6 +16,19 @@ const Sidebar = ({ active, setActive, isSideMenuOpen, setIsSideMenuOpen }) => {
     { key: "transactions", label: "Transactions", icon: <FiCreditCard /> },
     { key: "feedback", label: "Feedback", icon: <FiMessageSquare /> },
   ];
+
+  const restaurantLogoutFunction = async () => {
+    try {
+      await api.post("/auth/logout");
+      setIsLogin(false);
+      setUser(null);
+      setIsRestaurant(false);
+      sessionStorage.removeItem("BhojanUser");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Logout failed");
+    }
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -32,6 +51,16 @@ const Sidebar = ({ active, setActive, isSideMenuOpen, setIsSideMenuOpen }) => {
           </button>
         ))}
       </nav>
+
+      <div className="p-2 border-t">
+        <button
+          onClick={restaurantLogoutFunction}
+          className="w-full flex items-center gap-3 p-2 rounded text-error hover:bg-error hover:text-error-content"
+        >
+          <span className="text-lg"><FiLogOut /></span>
+          {isSideMenuOpen && <span>Logout</span>}
+        </button>
+      </div>
     </div>
   );
 };

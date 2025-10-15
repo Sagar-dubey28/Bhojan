@@ -264,8 +264,11 @@ export const RestaurantLogin = async (req, res, next) => {
       return next(error);
     }
 
-    //manually add the role field
-    existingResturant.role = "resturant";
+    // Create response data with role
+    const responseData = {
+      ...existingResturant.toObject(),
+      role: "restaurant"
+    };
 
     if (!genToken(existingResturant._id, res)) {
       const error = new Error("Unable to Login");
@@ -273,11 +276,9 @@ export const RestaurantLogin = async (req, res, next) => {
       return next(error);
     }
 
-    console.log(existingResturant);
-
     res.status(200).json({
-      message: "Resturant Logged In Successfully",
-      data: existingResturant,
+      message: "Restaurant Logged In Successfully",
+      data: responseData
     });
   } catch (error) {
     next(error);

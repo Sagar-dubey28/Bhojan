@@ -15,7 +15,7 @@ import { Protect, ProtectFP } from "../middleware/userMiddleware.js";
 const router = express.Router();
 
 router.post("/register", registerUser);
-router.post("/customer/login", loginUser);
+router.post("/user/login", loginUser);
 router.post("/restaurant/login", RestaurantLogin);
 router.post("/rider/login", RiderLogin);
 router.post("/logout", logout);

@@ -8,7 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import { Toaster } from "react-hot-toast";
 import AdminLogin from "./pages/admin/adminLogin";
 import AdminDashBoard from "./pages/admin/adminDashBoard";
-import RestaurantDashboard from "./pages/Restaurantdashboard";
+import RestaurantDashboard from   "./pages/RestaurantDashboard";
 import Restaurants from "./home/Restaurants";
 import RestaurantDetails from "./home/RestaurantDetails";
 import AddToCartPage from "./pages/cart/AddToCartPage";

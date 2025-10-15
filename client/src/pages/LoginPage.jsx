@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import ForgetPasswordModal from "../pageModal/forgetPasswordModal";
 
 const LoginPage = () => {
-  const { setUser, setIsLogin } = useAuth();
+  const { setUser, setIsLogin, setIsRestaurant, setIsRider } = useAuth();
 
   const [isForgetpasswordModalOpen, setIsForgetpasswordModalOpen] =
     useState(false);
@@ -31,22 +31,23 @@ const LoginPage = () => {
       toast.success(res.data.message);
       setUser(res.data.data);
       console.log(res.data.data);
-      
+
       setIsLogin(true);
       sessionStorage.setItem("BhojanUser", JSON.stringify(res.data.data));
-      
+
       // Navigate based on role
-      switch (loginData.role) {
-        case "restaurant":
-          navigate("/restaurantDashboard");
-          break;
-        case "rider":
-          navigate("/riderDashboard");
-          break;
-        default:
-          navigate("/profilePage");
-          break;
-      };
+      const userRole = res.data.data.role;
+      console.log("User role from response:", userRole);
+      
+      if (userRole === "restaurant") {
+        setIsRestaurant(true);
+        navigate("/restaurantDashboard");
+      } else if (userRole === "rider") {
+        setIsRider(true);
+        navigate("/riderDashboard");
+      } else {
+        navigate("/profilePage");
+      }
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || error.message);

@@ -10,18 +10,22 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthProvider";
 
 const RestaurantDashboard = () => {
-  const { isLogin } = useAuth();
+  const { isLogin, isRestaurant } = useAuth();
   const navigate = useNavigate();
   const [active, setActive] = useState("overview");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
 
   useEffect(() => {
-    !isLogin && navigate("/");
-  }, [isLogin]);
+    console.log('Restaurant Dashboard Auth State:', { isLogin, isRestaurant });
+    if (!isLogin || !isRestaurant) {
+      console.log('Redirecting to home - Not authenticated as restaurant');
+      navigate("/");
+    }
+  }, [isLogin, isRestaurant]);
 
   return (
     <>
-      {isLogin && (
+      {isLogin && isRestaurant && (
         <div className="flex min-h-[91vh]">
           <div
             className={`border overflow-hidden ${
