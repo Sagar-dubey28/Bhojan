@@ -32,12 +32,12 @@ app.get("/", (req, res) => {
 });
 
 //Routing
-app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/public", publicRoutes);
-app.use("/api/restaurant", restaurantRoutes);  
-app.use("/api/payment", paymentRoute);
+app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
+app.use("/admin", adminRoutes);
+app.use("/public", publicRoutes);
+app.use("/restaurant", restaurantRoutes);
+app.use("/payment", paymentRoute);
 
 //our made middleware
 app.use((err, req, res, next) => {
