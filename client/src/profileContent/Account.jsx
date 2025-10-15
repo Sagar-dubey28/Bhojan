@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import ResetPassword from "./userModal/ResetPassword";
+import ResetPasswordModal from "./userModal/ResetPasswordModal";
 import EditProfileModal from "./userModal/EditProfileModal";
 import { useAuth } from "../Context/AuthProvider";
 
@@ -119,7 +119,7 @@ const Account = () => {
         </div>
       </div>
 
-      <ResetPassword
+      <ResetPasswordModal
         isOpen={isResetPassModalOpen}
         onClose={() => setIsResetPassModalOpen(false)}
       />
