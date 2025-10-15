@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import genToken from "../utils/genToken.js";
 import OTP from "../models/otpModel.js";
-import sendEmail from "../utils/sendemail.js";
+import sendEmail from "../utils/sendEmail.js";
 import { genForgetPassToken } from "../utils/genForgetPassToken.js";
 import Rider from "../models/riderModel.js";
 import Resturant from "../models/restaurentModel.js";
