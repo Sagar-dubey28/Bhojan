@@ -4,7 +4,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import api from "../../config/api";
 
 
-const ResetPassword = ({ isOpen, onClose }) => {
+const ResetPasswordModal = ({ isOpen, onClose }) => {
   const [resetPassForm, setResetPassForm] = useState({
     currentPassword: "",
     newPassword: "",
@@ -103,4 +103,4 @@ const ResetPassword = ({ isOpen, onClose }) => {
   );
 };
 
-export default ResetPassword;
+export default ResetPasswordModal;
