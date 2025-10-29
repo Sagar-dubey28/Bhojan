@@ -3,10 +3,14 @@ import { useLocation } from "react-router-dom";
 import api from "../config/api";
 import toast from "react-hot-toast";
 import { useCart } from "../Context/cartContext";
+import { useAuth } from "../Context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const RestaurantDetails = () => {
   // normalize incoming state (support typo and different keys)
   const { addToCart, cartItems } = useCart();
+  const { isLogin } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state || {};
   const selectedResturant = state.selectedResturant || null;
@@ -314,12 +318,17 @@ const RestaurantDetails = () => {
                     ₹{item.price}
                   </span>
                   <button className="btn btn-sm btn-primary gap-2" onClick={() => {
+                    if (!isLogin) {
+                      toast.error('Please login to add items to cart');
+                      navigate('/login');
+                      return;
+                    }
                     addToCart(item);
                     toast.success(`${item.name} added to cart`);
                   }}>
                     <span>Add to Cart</span>
-                    {cartQuantity > 0 && (
-                      <span className="badge badge-sm">{cartQuantity}</span>
+                    {(cartItems.find((ci) => ci._id === item._id)?.quantity || 0) > 0 && (
+                      <span className="badge badge-sm">{cartItems.find((ci) => ci._id === item._id)?.quantity || 0}</span>
                     )}
                   </button>
                 </div>
