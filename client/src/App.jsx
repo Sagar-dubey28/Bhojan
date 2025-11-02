@@ -8,7 +8,7 @@ import ProfilePage from "./pages/ProfilePage";
 import { Toaster } from "react-hot-toast";
 import AdminLogin from "./pages/admin/adminLogin";
 import AdminDashBoard from "./pages/admin/adminDashBoard";
-import RestaurantDashboard from   "./pages/RestaurantDashboard";
+import RestaurantDashboard from "./pages/RestaurantDashboard";
 import Restaurants from "./home/Restaurants";
 import RestaurantDetails from "./home/RestaurantDetails";
 import AddToCartPage from "./pages/cart/AddToCartPage";
@@ -17,6 +17,10 @@ import PaymentSuccess from "./pages/cart/PaymentSuccess";
 
 //changes by github
 function App() {
+  console.log(
+    "Backend URL:",
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:4500"
+  );
   return (
     <>
       <Router>
