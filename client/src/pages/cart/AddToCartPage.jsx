@@ -49,6 +49,10 @@ const AddToCartPage = () => {
 
       const { data } = await api.post("/payment/paymentverification", payload);
       if (data.success) {
+        // clear cart in memory and in per-user storage (CartProvider persists empty cart)
+        clearCart();
+        toast.success("Payment successful — your order is placed");
+        // redirect to success page
         window.location.href = `/paymentsuccess?reference=${response.razorpay_payment_id}`;
       }
     } catch (error) {
