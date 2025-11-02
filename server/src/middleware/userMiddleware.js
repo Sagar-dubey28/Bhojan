@@ -1,20 +1,22 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
-import Admin from "../models/adminModel.js"
+import Admin from "../models/adminModel.js";
 import Resturant from "../models/restaurentModel.js";
 import Rider from "../models/riderModel.js";
-
 
 export const Protect = async (req, res, next) => {
   try {
     // Accept token from Authorization header (Bearer <token>) OR cookie
     let token = null;
-    const authHeader = req.headers?.authorization || req.header('Authorization');
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      token = authHeader.split(' ')[1];
+    const authHeader =
+      req.headers?.authorization || req.header("Authorization");
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
     } else if (req.cookies && req.cookies.BhojanLoginKey) {
       token = req.cookies.BhojanLoginKey;
     }
+
+    console.log(token);
 
     if (!token) {
       const error = new Error("Not Authorized, No Token Found");
@@ -49,13 +51,14 @@ export const ProtectFP = async (req, res, next) => {
   try {
     // Accept token from Authorization header (Bearer <token>) OR cookie (BhojanFp)
     let token = null;
-    const authHeader = req.headers?.authorization || req.header('Authorization');
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      token = authHeader.split(' ')[1];
+    const authHeader =
+      req.headers?.authorization || req.header("Authorization");
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
     } else if (req.cookies && req.cookies.BhojanFp) {
       token = req.cookies.BhojanFp;
     }
-
+    console.log(token);
     if (!token) {
       const error = new Error("Not Authorized, No Token Found");
       error.statusCode = 401;
@@ -95,18 +98,18 @@ export const ProtectFP = async (req, res, next) => {
 
 //Admin protect middleware
 
-
 export const AdminProtect = async (req, res, next) => {
   try {
     // Accept token from Authorization header (Bearer <token>) OR cookie
     let token = null;
-    const authHeader = req.headers?.authorization || req.header('Authorization');
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      token = authHeader.split(' ')[1];
+    const authHeader =
+      req.headers?.authorization || req.header("Authorization");
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
     } else if (req.cookies && req.cookies.BhojanLoginKey) {
       token = req.cookies.BhojanLoginKey;
     }
-
+    console.log(token);
     if (!token) {
       const error = new Error("Not Authorized, No Token Found");
       error.statusCode = 401;
