@@ -8,11 +8,7 @@ export const Protect = async (req, res, next) => {
   try {
     // Accept token from Authorization header (Bearer <token>) OR cookie
     const token =
-      req.cookies?.BhojanLoginKey ||
-      (req.headers?.authorization &&
-      req.headers.authorization.startsWith("Bearer ")
-        ? req.headers.authorization.split(" ")[1]
-        : null);
+      req.cookies?.BhojanLoginKey || req.headers?.authorization?.split(" ")[1];
 
     console.log(token);
 
@@ -33,7 +29,7 @@ export const Protect = async (req, res, next) => {
     const verifiedUser = await User.findById(decode.id);
 
     if (!verifiedUser) {
-      const error = new Error("AuthNot orized, Invalid User");
+      const error = new Error("Not Authorized, Invalid User");
       error.statusCode = 401;
       throw error;
     }
@@ -49,11 +45,7 @@ export const ProtectFP = async (req, res, next) => {
   try {
     // Accept token from Authorization header (Bearer <token>) OR cookie (BhojanFp)
     const token =
-      req.cookies?.BhojanLoginKey ||
-      (req.headers?.authorization &&
-      req.headers.authorization.startsWith("Bearer ")
-        ? req.headers.authorization.split(" ")[1]
-        : null);
+      req.cookies?.BhojanLoginKey || req.headers?.authorization?.split(" ")[1];
 
     console.log(token);
     if (!token) {
@@ -99,11 +91,7 @@ export const AdminProtect = async (req, res, next) => {
   try {
     // Accept token from Authorization header (Bearer <token>) OR cookie
     const token =
-      req.cookies?.BhojanLoginKey ||
-      (req.headers?.authorization &&
-      req.headers.authorization.startsWith("Bearer ")
-        ? req.headers.authorization.split(" ")[1]
-        : null);
+      req.cookies?.BhojanLoginKey || req.headers?.authorization?.split(" ")[1];
 
     console.log(token);
     if (!token) {

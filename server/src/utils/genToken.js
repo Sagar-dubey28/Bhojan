@@ -6,14 +6,18 @@ const genToken = (userId, res) => {
       expiresIn: "1d",
     });
 
-    res.cookie("BhojanLoginKey", token, {
+    const isProd = process.env.NODE_ENV === "production";
+    const cookieOptions = {
       maxAge: 1000 * 60 * 60 * 24,
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,  // production ke liye secure true kr lena.
-    });
-    
+      // When frontend and backend are on different origins (Netlify/Render),
+      // the cookie must be Secure and SameSite=None to be sent cross-site.
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+      // domain: process.env.COOKIE_DOMAIN || undefined, // optional: set in prod if needed
+    };
 
+    res.cookie("BhojanLoginKey", token, cookieOptions);
     return true;
   } catch (error) {
     return false;

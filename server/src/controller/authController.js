@@ -95,7 +95,16 @@ export const loginUser = async (req, res, next) => {
 
 export const logout = (req, res, next) => {
   try {
-    res.clearCookie("BhojanLoginKey");
+    const isProd = process.env.NODE_ENV === "production";
+    const clearOptions = {
+      // match cookie attributes when clearing
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+      // domain: process.env.COOKIE_DOMAIN || undefined,
+    };
+
+    res.clearCookie("BhojanLoginKey", clearOptions);
     res.status(200).json({ message: "Logout Successfully" });
   } catch (error) {
     next(error);
@@ -231,8 +240,14 @@ export const forgetPassword = async (req, res, next) => {
     console.log("NewCurrentUser", currentUser);
 
     console.log("save ho gya hun.");
+    const isProd = process.env.NODE_ENV === "production";
+    const clearOptions = {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+    };
 
-    res.clearCookie("BhojanFp");
+    res.clearCookie("BhojanFp", clearOptions);
     res.status(200).json({ message: "Password Change Successful" });
   } catch (error) {
     next(error);

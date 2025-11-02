@@ -5,12 +5,16 @@ export const genForgetPassToken = (email, res) => {
     const token = jwt.sign({ key: email }, process.env.JWT_SECRET_KEY, {
       expiresIn: "10m",
     });
-    res.cookie("BhojanFp",token,{
-        maxAge:1000*60*10,
-        httpOnly:true,
-        sameSite:"lax",
-        secure:false, //production  main true kr lena.
-    })
+    const isProd = process.env.NODE_ENV === "production";
+    const cookieOptions = {
+      maxAge: 1000 * 60 * 10,
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+      // domain: process.env.COOKIE_DOMAIN || undefined,
+    };
+
+    res.cookie("BhojanFp", token, cookieOptions);
     return true;
   } catch (error) {
      return false;
