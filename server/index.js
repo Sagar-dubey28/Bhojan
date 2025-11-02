@@ -10,13 +10,19 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import cloudinary from "./src/config/cloudinary.js";
-
+import {instance as razorpay} from "./src/config/Razorpay.js";
 // import dotenv from "dotenv";
 // dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+console.log("Allowed CORS Origin:", process.env.FRONTEND_URL);
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}));
+
 
 // build in middleware
 app.use(express.json());
@@ -59,4 +65,10 @@ app.listen(port, async () => {
   } catch (error) {
     console.error("cloudinary Connection Error", error);
   }
+  try {
+  const response = await razorpay.customers.all({ count: 1 });
+  console.log("Razorpay Connected Successfully!");
+} catch (error) {
+  console.error("Razorpay Connection Failed:", error.message);
+}
 });

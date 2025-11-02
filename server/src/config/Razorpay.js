@@ -1,8 +1,8 @@
 import Razorpay from "razorpay";
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 
-// Ensure environment variables are loaded
-dotenv.config();
+// // Ensure environment variables are loaded
+// dotenv.config();
 
 
 export const instance = new Razorpay({
