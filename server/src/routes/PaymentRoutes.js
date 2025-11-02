@@ -2,6 +2,8 @@ import express from "express";
 import {
   checkout,
   paymentVerification,
+  getOrders,
+  getTransactions,
 } from "../controller/PaymentController.js";
 
 const router = express.Router();
@@ -13,5 +15,7 @@ router.get("/getkey", (req, res) =>
 router.post("/checkout", checkout);
 
 router.post("/paymentverification", paymentVerification);
+router.get("/orders", getOrders);
+router.get("/transactions", getTransactions);
 
 export default router;

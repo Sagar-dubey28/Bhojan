@@ -2,6 +2,8 @@ import { useCart } from "../../Context/cartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import api from "../../config/api";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const AddToCartPage = () => {
   const { cartItems, removeFromCart, clearCart, incrementQuantity, decrementQuantity } = useCart();
@@ -36,7 +38,16 @@ const AddToCartPage = () => {
 
   const verifyPayment = async (response) => {
     try {
-      const { data } = await api.post("/payment/paymentverification", response);
+      // response should include items, address, amount and optionally userEmail
+      const payload = {
+        ...response,
+        items: cartItems,
+        address: checkoutAddress,
+        amount: totalPrice + 40,
+        userEmail: JSON.parse(sessionStorage.getItem("BhojanUser"))?.email
+      };
+
+      const { data } = await api.post("/payment/paymentverification", payload);
       if (data.success) {
         window.location.href = `/paymentsuccess?reference=${response.razorpay_payment_id}`;
       }
@@ -46,12 +57,29 @@ const AddToCartPage = () => {
     }
   };
 
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [checkoutAddress, setCheckoutAddress] = useState({
+    name: "",
+    phone: "",
+    line1: "",
+    city: "",
+    pincode: ""
+  });
+
   const checkoutHandler = async () => {
     try {
       const { data: { key } } = await api.get("/payment/getkey");
       
-      const { data: { order } } = await api.post("/payment/checkout", {
-        amount: totalPrice + 40
+      if (!checkoutAddress.line1 || !checkoutAddress.city || !checkoutAddress.pincode || !checkoutAddress.phone) {
+        toast.error("Please fill in the delivery address before proceeding.");
+        setShowAddressForm(true);
+        return;
+      }
+
+      const { data: { order, meta } } = await api.post("/payment/checkout", {
+        amount: totalPrice + 40,
+        items: cartItems,
+        address: checkoutAddress
       });
 
       const options = {
@@ -70,7 +98,7 @@ const AddToCartPage = () => {
           contact: "9999999999"
         },
         notes: {
-          address: "Delivery Address"
+          address: `${checkoutAddress.line1}, ${checkoutAddress.city} - ${checkoutAddress.pincode}`
         },
         theme: {
           color: "#570DF8" // primary color
@@ -109,6 +137,23 @@ const AddToCartPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      {/* Address form modal/inline */}
+      {showAddressForm && (
+        <div className="card bg-base-100 shadow-lg p-6 mb-6">
+          <h3 className="text-lg font-bold mb-4">Delivery Address</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input className="input input-bordered" placeholder="Full name" value={checkoutAddress.name} onChange={(e)=>setCheckoutAddress({...checkoutAddress,name:e.target.value})} />
+            <input className="input input-bordered" placeholder="Phone" value={checkoutAddress.phone} onChange={(e)=>setCheckoutAddress({...checkoutAddress,phone:e.target.value})} />
+            <input className="input input-bordered col-span-2" placeholder="Address line" value={checkoutAddress.line1} onChange={(e)=>setCheckoutAddress({...checkoutAddress,line1:e.target.value})} />
+            <input className="input input-bordered" placeholder="City" value={checkoutAddress.city} onChange={(e)=>setCheckoutAddress({...checkoutAddress,city:e.target.value})} />
+            <input className="input input-bordered" placeholder="Pincode" value={checkoutAddress.pincode} onChange={(e)=>setCheckoutAddress({...checkoutAddress,pincode:e.target.value})} />
+          </div>
+          <div className="flex gap-2 mt-4">
+            <button className="btn btn-primary" onClick={()=>{ setShowAddressForm(false); toast.success('Address saved'); }}>Save Address</button>
+            <button className="btn btn-ghost" onClick={()=>setShowAddressForm(false)}>Close</button>
+          </div>
+        </div>
+      )}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

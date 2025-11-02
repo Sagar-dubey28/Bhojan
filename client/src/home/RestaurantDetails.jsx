@@ -323,7 +323,9 @@ const RestaurantDetails = () => {
                       navigate('/login');
                       return;
                     }
-                    addToCart(item);
+                    // attach restaurant id to cart item so orders can be associated with restaurant
+                    const itemWithRestaurant = { ...item, resturantId: selectedResturant?._id || restaurantIdFromState };
+                    addToCart(itemWithRestaurant);
                     toast.success(`${item.name} added to cart`);
                   }}>
                     <span>Add to Cart</span>
