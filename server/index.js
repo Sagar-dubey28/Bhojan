@@ -16,7 +16,7 @@ import cloudinary from "./src/config/cloudinary.js";
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: ["http://localhost:5173", "https://bhojan-56.netlify.app/"], credentials: true }));
 
 // build in middleware
 app.use(express.json());
