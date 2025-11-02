@@ -19,7 +19,7 @@ import PaymentSuccess from "./pages/cart/PaymentSuccess";
 function App() {
   console.log(
     "Backend URL:",
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:4500"
+    "https://bhojan-r8pl.onrender.com"
   );
   return (
     <>

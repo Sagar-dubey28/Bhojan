@@ -1,7 +1,6 @@
 import axios from "axios";
 
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4500";
+const BACKEND_URL = "https://bhojan-r8pl.onrender.com";
 
 const api = axios.create({ baseURL: `${BACKEND_URL}`, withCredentials: true });
 
