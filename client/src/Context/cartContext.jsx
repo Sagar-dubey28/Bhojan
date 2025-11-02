@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./AuthProvider";
 
 // Create context
 const CartContext = createContext();
@@ -8,17 +9,48 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const { user } = useAuth();
 
-  // Load from LocalStorage on mount
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cartItems"));
-    if (storedCart) setCartItems(storedCart);
-  }, []);
+  const storageKeyFor = (email) => `cartItems_${encodeURIComponent(email)}`;
 
-  // Save to LocalStorage when cart changes
+  const loadCartForUser = (email) => {
+    try {
+      const key = storageKeyFor(email);
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : [];
+    } catch (err) {
+      console.warn("Failed to load cart for user:", err);
+      return [];
+    }
+  };
+
+  const saveCartForUser = (email, items) => {
+    try {
+      const key = storageKeyFor(email);
+      localStorage.setItem(key, JSON.stringify(items));
+    } catch (err) {
+      console.warn("Failed to save cart for user:", err);
+    }
+  };
+
+  // Load saved cart for logged-in user; clear cart when no user (logout)
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (user && user.email) {
+      const saved = loadCartForUser(user.email);
+      setCartItems(saved || []);
+    } else {
+      // no user => clear in-memory cart
+      setCartItems([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  // Persist cart when it changes for logged-in user
+  useEffect(() => {
+    if (user && user.email) {
+      saveCartForUser(user.email, cartItems);
+    }
+  }, [cartItems, user]);
 
   // Add item to cart
   const addToCart = (item) => {
