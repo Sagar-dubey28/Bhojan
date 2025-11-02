@@ -4,7 +4,7 @@ import authRoutes from "./src/routes/authRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
 import publicRoutes from "./src/routes/publicRoutes.js";
-import restaurantRoutes from "./src/routes/restaurantRoutes.js";  
+import restaurantRoutes from "./src/routes/restaurantRoutes.js";
 import paymentRoute from "./src/routes/PaymentRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -16,7 +16,7 @@ import cloudinary from "./src/config/cloudinary.js";
 
 const app = express();
 
-app.use(cors({ origin: ["http://localhost:5173", "https://bhojan-56.netlify.app/"], credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
 // build in middleware
 app.use(express.json());
