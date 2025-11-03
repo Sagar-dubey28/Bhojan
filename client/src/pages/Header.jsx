@@ -1,4 +1,4 @@
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart, Menu, X } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthProvider";
@@ -31,6 +31,8 @@ const Header = () => {
     localStorage.getItem("BhojanTheme") || "light"
   );
 
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   // Calculate total items in cart
   const cartItemsCount = cartItems.reduce(
     (total, item) => total + (item.quantity || 1),
@@ -48,10 +50,21 @@ const Header = () => {
   }, [theme]);
 
   return (
-    <header className="flex justify-between items-center px-6 py-4 bg-base-200 shadow-md">
-      {/* Left - Logo */}
-      <div className="text-primary text-2xl font-bold">
-        <NavLink to="/">🍽️ Bhojan</NavLink>
+    <header className="relative z-50 flex justify-between items-center px-6 py-4 bg-base-200 shadow-md">
+      {/* Left - Logo + mobile hamburger */}
+      <div className="flex items-center gap-3">
+        <div className="text-primary text-2xl font-bold">
+          <NavLink to="/">🍽️ Bhojan</NavLink>
+        </div>
+        {/* mobile hamburger */}
+        <button
+          className="md:hidden p-2 rounded-md hover:bg-base-300"
+          aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
+          onClick={() => setMobileOpen((v) => !v)}
+        >
+          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
 
       {/* Center - Nav + Search (hidden on small screens) */}
@@ -152,6 +165,32 @@ const Header = () => {
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Mobile menu (drops down) */}
+      <div className={`md:hidden ${mobileOpen ? "block" : "hidden"} absolute left-0 right-0 top-full bg-base-100 shadow-lg z-40`}>
+        <div className="p-4 space-y-3">
+          <div className="flex items-center gap-2">
+            <Search className="w-4 h-4 text-base-content/50" />
+            <input
+              type="text"
+              placeholder="Search restaurants or dishes"
+              className="input input-bordered input-sm w-full"
+              aria-label="Mobile search"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <NavLink to="/" onClick={() => setMobileOpen(false)} className="py-2 px-3 rounded hover:bg-base-200">Home</NavLink>
+            <NavLink to="/restaurants" onClick={() => setMobileOpen(false)} className="py-2 px-3 rounded hover:bg-base-200">Restaurants</NavLink>
+            <NavLink to="/addToCart" onClick={() => setMobileOpen(false)} className="py-2 px-3 rounded hover:bg-base-200">Cart</NavLink>
+            {isLogin ? (
+              <NavLink to="/profilePage" onClick={() => setMobileOpen(false)} className="py-2 px-3 rounded hover:bg-base-200">Profile</NavLink>
+            ) : (
+              <NavLink to="/login" onClick={() => setMobileOpen(false)} className="py-2 px-3 rounded hover:bg-base-200">Login</NavLink>
+            )}
+          </div>
+        </div>
       </div>
     </header>
   );

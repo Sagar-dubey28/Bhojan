@@ -9,7 +9,7 @@ import Order from "../profileContent/Order";
 const ProfilePage = () => {
   const [active, setActive] = useState("Account");
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
       {/* sidebar */}
       <div>
         <Sidebar active={active} setActive={setActive} />

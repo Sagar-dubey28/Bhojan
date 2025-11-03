@@ -143,18 +143,18 @@ const AddToCartPage = () => {
     <div className="max-w-4xl mx-auto p-6">
       {/* Address form modal/inline */}
       {showAddressForm && (
-        <div className="card bg-base-100 shadow-lg p-6 mb-6">
+        <div className="card bg-base-100 shadow-lg p-4 sm:p-6 mb-6 w-full">
           <h3 className="text-lg font-bold mb-4">Delivery Address</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <input className="input input-bordered" placeholder="Full name" value={checkoutAddress.name} onChange={(e)=>setCheckoutAddress({...checkoutAddress,name:e.target.value})} />
-            <input className="input input-bordered" placeholder="Phone" value={checkoutAddress.phone} onChange={(e)=>setCheckoutAddress({...checkoutAddress,phone:e.target.value})} />
-            <input className="input input-bordered col-span-2" placeholder="Address line" value={checkoutAddress.line1} onChange={(e)=>setCheckoutAddress({...checkoutAddress,line1:e.target.value})} />
-            <input className="input input-bordered" placeholder="City" value={checkoutAddress.city} onChange={(e)=>setCheckoutAddress({...checkoutAddress,city:e.target.value})} />
-            <input className="input input-bordered" placeholder="Pincode" value={checkoutAddress.pincode} onChange={(e)=>setCheckoutAddress({...checkoutAddress,pincode:e.target.value})} />
+            <input aria-label="Full name" className="input input-bordered w-full" placeholder="Full name" value={checkoutAddress.name} onChange={(e)=>setCheckoutAddress({...checkoutAddress,name:e.target.value})} />
+            <input aria-label="Phone" className="input input-bordered w-full" placeholder="Phone" value={checkoutAddress.phone} onChange={(e)=>setCheckoutAddress({...checkoutAddress,phone:e.target.value})} />
+            <input aria-label="Address line" className="input input-bordered md:col-span-2 w-full" placeholder="Address line" value={checkoutAddress.line1} onChange={(e)=>setCheckoutAddress({...checkoutAddress,line1:e.target.value})} />
+            <input aria-label="City" className="input input-bordered w-full" placeholder="City" value={checkoutAddress.city} onChange={(e)=>setCheckoutAddress({...checkoutAddress,city:e.target.value})} />
+            <input aria-label="Pincode" className="input input-bordered w-full" placeholder="Pincode" value={checkoutAddress.pincode} onChange={(e)=>setCheckoutAddress({...checkoutAddress,pincode:e.target.value})} />
           </div>
-          <div className="flex gap-2 mt-4">
-            <button className="btn btn-primary" onClick={()=>{ setShowAddressForm(false); toast.success('Address saved'); }}>Save Address</button>
-            <button className="btn btn-ghost" onClick={()=>setShowAddressForm(false)}>Close</button>
+          <div className="flex flex-col sm:flex-row gap-2 mt-4">
+            <button className="btn btn-primary w-full sm:w-auto" onClick={()=>{ setShowAddressForm(false); toast.success('Address saved'); }}>Save Address</button>
+            <button className="btn btn-ghost w-full sm:w-auto" onClick={()=>setShowAddressForm(false)}>Close</button>
           </div>
         </div>
       )}
