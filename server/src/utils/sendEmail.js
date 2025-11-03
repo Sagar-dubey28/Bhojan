@@ -13,8 +13,8 @@ const sendEmail = async (to, subject, html) => {
       port: 587,
       secure: false,
       auth: {
-        user: process.env.SENDGRID_USER || "apikey",
-        pass: process.env.SENDGRID_API_KEY,
+        user: "apikey",
+        pass: process.env.SENDGRID_PASS,
       },
     };
   } else if (process.env.GMAIL_USER && process.env.GMAIL_PASS) {
