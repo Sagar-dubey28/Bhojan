@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 export const genForgetPassToken = (email, res) => {
   try {
-    const token = jwt.sign({ key: email }, process.env.JWT_SECRET_KEY, {
+    const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY, {
       expiresIn: "10m",
     });
     const isProd = process.env.NODE_ENV === "production";

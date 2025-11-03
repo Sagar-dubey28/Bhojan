@@ -28,9 +28,9 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
 
     try {
       setError("");
-      setIsLoading(true);
+        setIsLoading(true);
 
-      if (!isOTPsent) {
+  if (!isOTPsent) {
         if (!role) {
           throw new Error("Please select a role to continue");
         }
@@ -43,29 +43,41 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
           toast.success(res.data.message || "OTP sent!");
           setIsOTPsent(true);
         } catch (error) {
-          throw new Error(error.response?.data?.message || "Failed to send OTP");
+          // show error and stop loading
+          toast.error(error.response?.data?.message || "Failed to send OTP");
+          setIsLoading(false);
+          return;
         }
+        // stop loading after successful send
+        setIsLoading(false);
       } else if (!isOTPVerified) {
-            try {
-              const res = await api.post("/auth/verifyOtp", { email, otp });
-              toast.success(res.data.message || "OTP verified!");
-              setIsOTPVerified(true);
-            } catch (error) {
-              toast.error(error.response?.data?.message || error.message);
-            }finally {
-              setIsLoading(false);
-            }
+        try {
+          const res = await api.post("/auth/verifyOtp", { email, otp });
+          toast.success(res.data.message || "OTP verified!");
+          setIsOTPVerified(true);
+        } catch (error) {
+          toast.error(error.response?.data?.message || error.message);
+        } finally {
+          setIsLoading(false);
+        }
       } else {
-        const res = await api.post("/auth/forgetPassword", {
-          role,
-          newPassword,
-          confirmPassword,
-        });
-        toast.success(res.data.message || "Password reset successful!");
-        handleCloseClick();
+        try {
+          const res = await api.post("/auth/forgetPassword", {
+            role,
+            newPassword,
+            confirmPassword,
+          });
+          toast.success(res.data.message || "Password reset successful!");
+          handleCloseClick();
+        } catch (error) {
+          toast.error(error.response?.data?.message || error.message);
+        } finally {
+          setIsLoading(false);
+        }
       }
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
+      setIsLoading(false);
     }
   };
 

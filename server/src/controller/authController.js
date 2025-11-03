@@ -188,7 +188,7 @@ export const sendOtp = async (req, res, next) => {
     });
 
     if (emailStatus) {
-      res.status(200).json({ mesage: "OTp sent Successfully on Email" });
+      res.status(200).json({ message: "OTP sent successfully to email" });
     } else {
       res.status(404).json({ message: "Unable To sent OTP" });
     }

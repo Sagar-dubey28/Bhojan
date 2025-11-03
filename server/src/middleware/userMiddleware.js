@@ -45,7 +45,7 @@ export const ProtectFP = async (req, res, next) => {
   try {
     // Accept token from Authorization header (Bearer <token>) OR cookie (BhojanFp)
     const token =
-      req.cookies?.BhojanLoginKey || req.headers?.authorization?.split(" ")[1];
+      req.cookies?.BhojanFp || req.headers?.authorization?.split(" ")[1];
 
     console.log(token);
     if (!token) {
